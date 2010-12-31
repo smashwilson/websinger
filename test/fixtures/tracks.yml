@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyString
+  artist: MyString
+  album: MyString
+  track_number: 1
+  disc_number: 1
+  length: 1
+  path: MyString
+
+two:
+  title: MyString
+  artist: MyString
+  album: MyString
+  track_number: 1
+  disc_number: 1
+  length: 1
+  path: MyString
