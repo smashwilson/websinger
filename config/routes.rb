@@ -1,19 +1,6 @@
 Websinger::Application.routes.draw do
-  get "track/index"
 
-  get "track/show_album"
-
-  get "player/show"
-
-  get "player/update"
-
-  get "playlist/index"
-
-  get "playlist/update"
-
-  get "playlist/destroy"
-
-  get "playlist/sort"
+  root :to => 'track#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
