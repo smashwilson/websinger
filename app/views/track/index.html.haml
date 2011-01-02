@@ -1,4 +1,9 @@
 %h2 Browse
+= form_tag(nil, :method => 'get') do
+  = label_tag :query, 'Query:'
+  = text_field_tag :query, params[:query]
+  = submit_tag 'Search'
 %ul.tracks
-- @tracks.each do |track|
-  %li= track.title
+  - @tracks.each do |track|
+    %li
+      = render :partial => 'track', :object => track

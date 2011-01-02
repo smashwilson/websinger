@@ -4,6 +4,13 @@ class Track < ActiveRecord::Base
   validates_uniqueness_of :path
   validates_uniqueness_of :title, :uniqueness => { :scope => :artist }
   
+  # Return all tracks with a title, album, or artist name matching a query term.
+  # If +term+ is nil, all tracks will be returned.
+  def self.matching term
+    ts = term.nil? ? self : where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" })
+    ts.order :artist, :album, :track_number
+  end
+
   # Create a new instance based on the IDv3 tag of the file at +path+.
   def self.read_from path
     inst = new
