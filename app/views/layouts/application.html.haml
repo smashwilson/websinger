@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %title Websinger
+    = stylesheet_link_tag :all
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+  %body
+    %h1.banner Websinger
+    .player Player goes here
+    = yield
