@@ -1,6 +1,14 @@
 Websinger::Application.routes.draw do
-
-  root :to => 'track#index'
+  
+  resource :playlist, :only => [:show, :update, :destroy] do
+    post 'sort'
+  end
+  
+  resources :tracks, :only => [:index] do
+    get 'in-album/:name' => 'tracks#show_album', :on => :collection, :as => 'album'
+  end
+  
+  root :to => redirect('/playlist')
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

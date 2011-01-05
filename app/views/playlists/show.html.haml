@@ -1,0 +1,4 @@
+%h2 Playlist
+%ol.playlist
+  - @playlist.each do |enqueued|
+    %li= render :partial => 'track/track', :object => enqueued.track

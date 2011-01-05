@@ -1,4 +1,4 @@
-class TrackController < ApplicationController
+class TracksController < ApplicationController
 
   def index
     @tracks = Track.matching(params[:query])
