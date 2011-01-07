@@ -1,4 +1,4 @@
-!!!
+!!! 5
 %html
   %head
     %title Websinger
@@ -7,6 +7,8 @@
     = csrf_meta_tag
   %body
     %h1.banner Websinger
+    #success
+    #failure
     .player Player goes here
     %ul.navigation
       %li= link_to 'playlist', playlist_path
