@@ -1,7 +1,22 @@
 class EnqueuedTrack < ActiveRecord::Base
-  has_one :track
+  validates_presence_of :track
+
+  belongs_to :track
   
   def self.playlist
-    order :position
+    includes(:track).order(:position)
+  end
+  
+  # Atomically create a new EnqueuedTrack placing +track+ at the end of the
+  # existing playlist.  The EnqueuedTrack may have validation or other error
+  # conditions.
+  def self.enqueuement_of track
+    transaction do
+      inst = new
+      inst.track = track
+      inst.position = (maximum(:position) || 0) + 1
+      inst.save
+      inst
+    end
   end
 end

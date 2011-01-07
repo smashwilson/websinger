@@ -4,7 +4,11 @@ class Track < ActiveRecord::Base
   validates_uniqueness_of :path
   validates_uniqueness_of :title, :uniqueness => { :scope => :artist }
   
-  belongs_to :enqueued_track
+  has_many :enqueued_tracks
+  
+  def to_s
+    "#{artist} - #{title}"
+  end
   
   # Return all tracks with a title, album, or artist name matching a query term.
   # If +term+ is nil, all tracks will be returned.
