@@ -1,11 +1,14 @@
 Websinger::Application.routes.draw do
   
-  resource :playlist, :only => [:show, :update, :destroy] do
-    post 'sort'
+  resource :playlist, :only => [:show, :update] do
+    post 'enqueue/:id' => 'playlists#enqueue', :as => 'enqueue'
+    delete 'dequeue/:id' => 'playlist#dequeue', :as => 'dequeue'
   end
   
   resources :tracks, :only => [:index] do
-    get 'in-album/:name' => 'tracks#show_album', :on => :collection, :as => 'album'
+    get 'in-album/:name' => 'tracks#show_album',
+      :on => :collection,
+      :as => 'album'
   end
   
   root :to => redirect('/playlist')
