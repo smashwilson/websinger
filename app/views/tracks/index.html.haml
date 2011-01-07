@@ -7,3 +7,5 @@
   - @tracks.each do |track|
     %li
       = render :partial => 'track', :object => track
+      = link_to 'enqueue', enqueue_playlist_path(track),
+          :method => 'POST', :remote => true
