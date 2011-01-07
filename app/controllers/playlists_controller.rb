@@ -7,10 +7,23 @@ class PlaylistsController < ApplicationController
   def update
   end
 
-  def destroy
+  def enqueue
+    track = Track.find params[:id]
+
+    if track.nil?
+      render :status => 404, :text => "Track (#{params[:id]}) not found"
+      return
+    end
+
+    e = EnqueuedTrack.enqueuement_of track
+    unless e.valid?
+      render :status => 500, :text => "Unable to enqueue track: #{e.errors.full_messages.join ' '}"
+    end
+
+    render :text => "#{track} has been added to the playlist at position #{e.position}."
   end
 
-  def sort
+  def dequeue
   end
 
 end
