@@ -2,6 +2,8 @@ class PlaylistsController < ApplicationController
 
   def show
     @playlist = EnqueuedTrack.playlist
+
+    render :partial => 'playlist', :object => @playlist if request.xhr?
   end
 
   # Reorder the tracks within the playlist.

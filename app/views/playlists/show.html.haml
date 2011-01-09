@@ -1,9 +1,5 @@
-%h2 Playlist
+%h2 playlist
 %ol.playlist
-  - @playlist.each do |enqueued|
-    %li{ :id => "enqueued_track_#{enqueued.id}" }
-      %span.handle [=]
-      = render :partial => 'tracks/track', :object => enqueued.track
-      = link_to 'remove', dequeue_playlist_path(enqueued), :method => 'DELETE'
+  = render :partial => 'playlist', :object => @playlist
 - content_for :head do
   = javascript_include_tag playlist_path

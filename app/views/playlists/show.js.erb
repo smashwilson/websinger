@@ -1,20 +1,39 @@
 $(function () {
+  // If true, the periodic update function will be suppressed.
+  var suppressUpdate = false
+
   // Make the playlist sortable.
   $('.playlist').sortable({
     axis: 'y',
-    cursor: 'move',
+    cursor: 'n-resize',
     handle: '.handle',
     items: 'li',
     opacity: 0.9,
-    update: reorderPlaylist
+    start: startDrag,
+    update: finishDrag
   })
+  
+  // Executed when a drag operation starts.
+  function startDrag(event, ui) {
+    suppressUpdate = true
+  }
 
   // Executed when a playlist drag operation has been finished.
-  function reorderPlaylist(event, ui) {
+  function finishDrag(event, ui) {
     $.ajax({
       type: 'PUT',
       url: '<%= playlist_path %>',
-      data: $('.playlist').sortable('serialize')
+      data: $('.playlist').sortable('serialize'),
+      complete: function() { suppressUpdate = false }
     })
   }
+
+  // Periodically update the playlist contents.
+  (function periodic() {
+    if(! suppressUpdate) {
+      $('.playlist').load('<%= playlist_path %>', function () { setTimeout(periodic, 3000) })
+    } else {
+      setTimeout(periodic, 3000)
+    }
+  }())
 })
