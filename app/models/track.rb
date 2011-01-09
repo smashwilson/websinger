@@ -13,8 +13,8 @@ class Track < ActiveRecord::Base
   # Return all tracks with a title, album, or artist name matching a query term.
   # If +term+ is nil, all tracks will be returned.
   def self.matching term
-    ts = term.nil? ? self : where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" })
-    ts.order :artist, :album, :track_number
+    ts = term.blank? ? self : where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" })
+    ts.order(:artist, :album, :track_number)
   end
 
   # Create a new instance based on the IDv3 tag of the file at +path+.
