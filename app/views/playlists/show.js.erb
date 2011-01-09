@@ -1,0 +1,20 @@
+$(function () {
+  // Make the playlist sortable.
+  $('.playlist').sortable({
+    axis: 'y',
+    cursor: 'move',
+    handle: '.handle',
+    items: 'li',
+    opacity: 0.9,
+    update: reorderPlaylist
+  })
+
+  // Executed when a playlist drag operation has been finished.
+  function reorderPlaylist(event, ui) {
+    $.ajax({
+      type: 'PUT',
+      url: '<%= playlist_path %>',
+      data: $('.playlist').sortable('serialize')
+    })
+  }
+})

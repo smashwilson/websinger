@@ -4,9 +4,21 @@ class PlaylistsController < ApplicationController
     @playlist = EnqueuedTrack.playlist
   end
 
+  # Reorder the tracks within the playlist.
   def update
+    @playlist = EnqueuedTrack.playlist
+    
+    EnqueuedTrack.transaction do
+      @playlist.each do |enqueued|
+        enqueued.position = params[:enqueued_track].index(enqueued.id.to_s) + 1
+        enqueued.save
+      end
+    end
+    
+    render :nothing => true
   end
 
+  # Enqueue a new track by track id.
   def enqueue
     track = Track.find params[:id]
 
@@ -23,7 +35,10 @@ class PlaylistsController < ApplicationController
     render :text => "#{track} has been added to the playlist at position #{e.position}."
   end
 
+  # Remove an existing EnqueuedTrack by *queue* id.
   def dequeue
+    EnqueuedTrack.delete(params[:id])
+    redirect_to playlist_path
   end
 
 end
