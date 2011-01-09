@@ -1,6 +1,6 @@
 $(function () {
-  // If true, the periodic update function will be suppressed.
-  var suppressUpdate = false
+  // If true, the user is rearranging the playlist.
+  var dragInProgress = false
 
   // Make the playlist sortable.
   $('.playlist').sortable({
@@ -15,7 +15,7 @@ $(function () {
   
   // Executed when a drag operation starts.
   function startDrag(event, ui) {
-    suppressUpdate = true
+    dragInProgress = true
   }
 
   // Executed when a playlist drag operation has been finished.
@@ -24,14 +24,19 @@ $(function () {
       type: 'PUT',
       url: '<%= playlist_path %>',
       data: $('.playlist').sortable('serialize'),
-      complete: function() { suppressUpdate = false }
+      complete: function() { dragInProgress = false }
     })
   }
 
   // Periodically update the playlist contents.
   (function periodic() {
-    if(! suppressUpdate) {
-      $('.playlist').load('<%= playlist_path %>', function () { setTimeout(periodic, 3000) })
+    if(! dragInProgress) {
+      $('.playlist').addClass('dragging-disabled').sortable('disable');
+      
+      $('.playlist').load('<%= playlist_path %>', function () {
+        $('.playlist').removeClass('dragging-disabled').sortable('enable');
+        setTimeout(periodic, 3000)
+      })
     } else {
       setTimeout(periodic, 3000)
     }

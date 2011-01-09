@@ -138,3 +138,7 @@ ol.playlist {
     margin: 0 4px ;
   }
 }
+
+ol.playlist.dragging-disabled .handle {
+  cursor: wait ;
+}
