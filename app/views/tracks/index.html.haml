@@ -1,10 +1,11 @@
-%h2 Browse
-= form_tag(nil, :method => 'get') do
-  = label_tag :query, 'Query:'
+%h2 browse
+= form_tag(tracks_path, :method => 'get') do
   = text_field_tag :query, params[:query]
-  = submit_tag 'Search'
+  = submit_tag 'search'
+.page-entries-info= page_entries_info @tracks
 %ul.tracks
   - @tracks.each do |track|
     %li
       = render :partial => 'track', :object => track
       = link_to 'enqueue', enqueue_playlist_path(track), :method => 'POST', :remote => true
+= will_paginate @tracks

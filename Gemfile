@@ -32,3 +32,4 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'haml'
 gem 'ruby-mp3info'
+gem 'will_paginate', '3.0.pre2'
