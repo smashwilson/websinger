@@ -1,10 +1,10 @@
 # Recursively scan a directory (default: .) for *.mp3 files.  Create a Track
 # object for each new artist-album combination discovered.
 
-namespace :util do
+namespace :websinger do
 
   desc 'Discover new tracks to add to the music library.'
-  task :populate, :path, :verbose, :needs => [:environment] do |t, args|
+  task :scan, :path, :verbose, :needs => [:environment] do |t, args|
     require 'find'
     
     root = args.path || '.'
