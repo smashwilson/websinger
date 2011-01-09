@@ -1,0 +1,140 @@
+$heading: 100px;
+
+$headingpad: 10px;
+$headingheight: $heading - (2 * $headingpad);
+
+/* Globally applicable styles */
+
+* {
+  font-family: sans-serif ;
+  margin: 0 ;
+  padding: 0 ;
+}
+
+.heading {
+  position: fixed ;
+  top: 0 ;
+  left: 0 ;
+  right: 0 ;
+  height: $headingheight ;
+  padding: $headingpad 7% ;
+  background: #eee ;
+  border-bottom: outset 2px gray ;
+  
+  h1 {
+    text-align: center ;
+  }
+  
+  .player {
+    font-style: italic ;
+  }
+  
+  ul.navigation {
+    list-style: none ;
+    
+    li {
+      display: inline ;
+    }
+  }
+}
+
+.content {
+  margin-top: $heading ;
+  padding: 1em 5% 0 ;
+  
+  h2 {
+    color: #333 ;
+    font-size: 110% ;
+    font-style: italic ;
+    font-variant: small-caps ;
+    letter-spacing: 2px ;
+    margin: 0.5em 0 0.5em -1em ;
+  }
+}
+
+/* AJAX status */
+
+.status {
+  position: absolute ;
+  left: 5% ;
+  right: 5% ;
+  bottom: 5% ;
+  border: 2px outset ;
+  font-weight: bold ;
+  text-align: center ;
+  padding: 10px 4% ;
+  display: none ;
+}
+
+#success {
+  color: darken(green, 30%) ;
+  border-color: green ;
+  background-color: lighten(green, 40%) ;
+}
+
+#failure {
+  display: none ;
+  color: darken(red, 30%) ;
+  border-color: red ;
+  background-color: lighten(red, 40%) ;
+}
+
+/* Tracks */
+
+.tracks li, .playlist li {
+  background: #ddf ;
+  padding: 3px 10px ;
+  margin: 2px 0 ;
+  list-style: none ;
+  font-size: 90% ;
+
+  span.artist {
+    margin-right: 4px ;
+  }
+  
+  span.title {
+    font-weight: bold ;
+    margin-right: 4px ;
+  }
+  
+  span.track-number {
+    margin-right: 2px ;
+  }
+  
+  span.album {
+    font-style: italic ;
+    margin-right: 2px ;
+  }
+}
+
+/* Track browsing */
+
+form {
+  margin: 1em 0 ;
+}
+
+.page-entries-info {
+  margin: 0.5em 0 ;
+  font-style: italic ;
+  text-align: center ;
+}
+
+ul.tracks {
+  margin: 5px 0 ;
+}
+
+.pagination {
+  margin: 0.5em 0 ;
+  text-align: center ;
+}
+
+/* Playlist */
+
+ol.playlist {
+  margin: 10px 0 ;
+
+  .handle {
+    cursor: n-resize ;
+    margin: 0 4px ;
+  }
+}
