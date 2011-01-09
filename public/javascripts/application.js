@@ -9,13 +9,16 @@ $(function() {
     $('#success')
       .show()
       .html(data)
-      .click(function () { $(this).fadeOut('slow') })
   })
   
   $('body').bind('ajax:error', function (event, xhr, status, error) {
     $('#failure')
       .show()
       .html(xhr.responseText)
-      .click(function () { $(this).fadeOut('slow') })
   })
+  
+  // AJAX results are dismissable by a click.
+  fadeCallback = function () { $(this).fadeOut('slow') }
+  $('#success').click(fadeCallback)
+  $('#failure').click(fadeCallback)
 })
