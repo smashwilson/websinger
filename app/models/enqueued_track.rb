@@ -19,4 +19,13 @@ class EnqueuedTrack < ActiveRecord::Base
       inst
     end
   end
+
+  # If any tracks are currently enqueued, delete and return the one with the lowest position.  Otherwise, return nil.
+  def self.top
+    transaction do
+      inst = playlist.first
+      inst.delete unless inst.nil?
+      inst
+    end
+  end
 end
