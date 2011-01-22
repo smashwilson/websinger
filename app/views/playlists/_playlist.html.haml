@@ -2,4 +2,4 @@
   %li{ :id => "enqueued_track_#{enqueued.id}" }
     %span.handle [=]
     = render :partial => 'tracks/track', :object => enqueued.track
-    = link_to 'remove', dequeue_playlist_path(enqueued), :method => 'DELETE'
+    = link_to 'remove', dequeue_playlist_path(enqueued), :method => 'DELETE', :remote => true
