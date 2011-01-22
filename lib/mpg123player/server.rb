@@ -2,6 +2,7 @@ require 'gserver'
 require 'thread'
 
 require 'mpg123player/common'
+require 'active_support/json'
 
 module Mpg123Player
 
@@ -97,11 +98,11 @@ class Server < GServer
   end
   
   def stop
+    File.delete(@pid_path, @status_path)
     @shutting_down = true
     super
     Process.kill 'TERM', @pipe.pid
     @pipe.close
-    File.delete(@pid_path, @status_path)
   end
   
   #

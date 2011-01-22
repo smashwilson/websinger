@@ -59,6 +59,13 @@ class Status
     
     true
   end
+  
+  def self.stopped
+    inst = new
+    inst.playback_state = :stopped
+    inst.clear
+    inst
+  end
 end
 
 end
