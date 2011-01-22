@@ -39,8 +39,15 @@ class PlaylistsController < ApplicationController
 
   # Remove an existing EnqueuedTrack by *queue* id.
   def dequeue
-    EnqueuedTrack.delete(params[:id])
-    redirect_to playlist_path
+    e = EnqueuedTrack.find params[:id]
+    if e.nil?
+      render :status => 404, :text => "Track (#{params[:id]}) not found"
+      return
+    end
+    
+    e.delete
+    
+    render :text => "#{e.track} has been removed from the playlist."
   end
 
 end
