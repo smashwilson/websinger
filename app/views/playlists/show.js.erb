@@ -27,17 +27,30 @@ $(function () {
       complete: function() { dragInProgress = false }
     })
   }
+  
+  // Bind "remove" link events on the list parent to avoid re-attaching event handlers every time the playlist is
+  // refreshed.
+  
+  // Update the playlist after a delete operation completes (successfully or otherwise).
+  $('.playlist').bind('ajax:complete', function(event, xhr) {
+    reloadPlaylist()
+  })
+  
+  // Asynchronously refresh the playlist, disabling drag-and-drop while doing so.
+  function reloadPlaylist(andThen) {
+    $('.playlist').addClass('dragging-disabled').sortable('disable')
+    $('.playlist').load('<%= playlist_path %>', function () {
+      $('.playlist').removeClass('dragging-disabled').sortable('enable')
+      if(andThen) { andThen() }
+    })
+  }
 
-  // Periodically update the playlist contents.
+  // Periodically update the playlist contents, unless something is in the midst of being drag-and-dropped.
   (function periodic() {
     if(! dragInProgress) {
-      $('.playlist').addClass('dragging-disabled').sortable('disable');
-      
-      $('.playlist').load('<%= playlist_path %>', function () {
-        $('.playlist').removeClass('dragging-disabled').sortable('enable');
-        setTimeout(periodic, 3000)
-      })
+      reloadPlaylist(function () { setTimeout(periodic, 3000) })
     } else {
+      console.log('skipping reload')
       setTimeout(periodic, 3000)
     }
   }())
