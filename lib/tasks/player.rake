@@ -11,6 +11,11 @@ namespace :websinger do
     POLL_TIME = 1 # seconds (may be fractional)
     
     server.advance do
+      if server.stay_stopped
+        # Re-enqueue the previously playing track.
+        t = Track.find(server.last_track_id)
+        EnqueuedTrack.enqueuement_of(t, :top)
+      end
       e = nil
       e = EnqueuedTrack.top unless server.stay_stopped
       while e.nil? && ! server.shutting_down

@@ -10,7 +10,7 @@ class Server < GServer
   include Configurable
 
   attr_accessor :stay_stopped, :shutting_down
-  attr_accessor :status, :last_status
+  attr_accessor :status, :last_status, :last_track_id
   
   def initialize
     configure
@@ -210,7 +210,10 @@ MSG
     former = @status.playback_state
     if former != playback_state
       @mutex.synchronize { @status.playback_state = playback_state }
-      @status.clear if playback_state == :stopped
+      if playback_state == :stopped
+        @last_track_id = @status.track_id
+        @status.clear
+      end
       update_status
       @on_stop.call if playback_state == :stopped
     end
