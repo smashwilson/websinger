@@ -1,15 +1,12 @@
 .player
   %p.error= @player.error
   %p.controls
-    - if @player.playing?
-      = link_to 'pause', player_path(:command => 'pause'), :method => 'PUT', :remote => true
-    - else
-      = link_to 'play', player_path(:command => 'play'), :method => 'PUT', :remote => true
-    = link_to 'stop', player_path(:command => 'stop'), :method => 'PUT', :remote => true
+    = command_link 'pause', @player.playing?
+    = command_link 'play', ! @player.playing?
+    = command_link 'stop'
   %p.track
     %span.artist= @status.artist
     %span.title= @status.title
   .progress
-    - if @current_track
-      %div{ :style => "width: #{@current_track.percent_complete(@status.seconds)}%" }
-        = "#{@status.seconds_s} / #{@current_track.length_s}"
+    .bar{ :style => "width: #{percent_complete}%" }
+    %span= time_s

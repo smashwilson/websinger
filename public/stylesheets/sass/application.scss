@@ -79,6 +79,33 @@ $headingheight: $heading - (2 * $headingpad);
   background-color: lighten(red, 40%) ;
 }
 
+/* Player */
+
+.player {
+  .disable { display: none }
+  
+  .progress {
+    position: relative ;
+    font-weight: bold ;
+    text-align: center ;
+    width: 100% ;
+    background: #eef ;
+    border: inset 2px black ;
+    .bar {
+      position: absolute ;
+      left: 0 ;
+      top: 0 ;
+      bottom: 0 ;
+      background: blue ;
+      z-index: 1 ;
+    }
+    span {
+      position: relative ;
+      z-index: 2 ;
+    }
+  }
+}
+
 /* Tracks */
 
 .tracks li, .playlist li {
