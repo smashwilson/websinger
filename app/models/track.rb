@@ -10,6 +10,15 @@ class Track < ActiveRecord::Base
     "#{artist} - #{title}"
   end
   
+  def length_s
+    minutes = length.to_i / 60
+    "#{minutes}:#{(length - minutes * 60).to_i.to_s.rjust(2, '0')}"
+  end
+  
+  def percent_complete seconds
+    (seconds / length) * 100
+  end
+  
   # Return all tracks with a title, album, or artist name matching a query term.
   # If +term+ is nil, all tracks will be returned.
   def self.matching term

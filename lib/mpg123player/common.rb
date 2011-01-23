@@ -29,9 +29,11 @@ module Configurable
   end
 end
 
+Commands = ['play', 'pause', 'stop', 'shutdown']
+
 class Status
   attr_accessor :title, :artist, :album, :track_number, :track_id
-  attr_accessor :seconds, :volume
+  attr_accessor :seconds, :track_length, :volume
   
   attr_accessor :playback_state
   
@@ -39,6 +41,11 @@ class Status
     @playback_state = :playing
     @seconds = 0
     @volume = 0
+  end
+  
+  def seconds_s
+    minutes = @seconds.to_i / 60
+    "#{minutes}:#{(@seconds - minutes * 60).to_i.to_s.rjust(2, '0')}"
   end
   
   def clear
@@ -64,6 +71,12 @@ class Status
     inst = new
     inst.playback_state = :stopped
     inst.clear
+    inst
+  end
+  
+  def self.from hash
+    inst = new
+    hash.each { |k,v| inst.send("#{k}=".to_sym, v) }
     inst
   end
 end

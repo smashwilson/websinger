@@ -1,5 +1,7 @@
 Websinger::Application.routes.draw do
   
+  resource :player, :only => [:show, :update]
+  
   resource :playlist, :only => [:show, :update] do
     post 'enqueue/:id' => 'playlists#enqueue', :as => 'enqueue'
     delete 'dequeue/:id' => 'playlists#dequeue', :as => 'dequeue'

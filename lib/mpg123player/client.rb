@@ -20,10 +20,24 @@ class Client
   def pause ; command 'pause' ; end
   def stop ; command 'stop' ; end
   def shutdown ; command 'shutdown' ; end
+
+  # Connect to the server, issue a command, and disconnect.
+  def command string
+    unless Commands.include? string
+      @error = "Invalid command: #{string}"
+      return
+    end
+    socket = TCPSocket.new('localhost', @server_port)
+  rescue e
+    @error = "Connection failed: #{e}"
+  else
+    socket.puts string
+    socket.close
+  end
   
   # Status
   
-  def player_ok?
+  def ok?
     unless File.readable?(@pid_path)
       @error = "Can't read the pid file at #{@pid_path}!"
       return false
@@ -38,7 +52,7 @@ class Client
   end
   
   def status
-    JSON(status_json)
+    @status ||= Status.from(JSON(status_json))
   end
   
   def status_json
@@ -49,18 +63,16 @@ class Client
     end
   end
   
-  protected
+  def playing?
+    status.playback_state == 'playing'
+  end
   
-  # Utilities
+  def paused?
+    status.playback_state == 'paused'
+  end
   
-  # Connect to the server, issue a command, and disconnect.
-  def command string
-    socket = TCPSocket.new('localhost', @server_port)
-  rescue e
-    @error = "Connection failed: #{e}"
-  else
-    socket.puts string
-    socket.close
+  def stopped?
+    status.playback_state == 'stopped'
   end
 
 end
