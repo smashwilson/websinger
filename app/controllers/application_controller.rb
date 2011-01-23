@@ -9,11 +9,9 @@ class ApplicationController < ActionController::Base
   def create_player_client
     @player = Mpg123Player::Client.new
     @player.ok?
+    
     @status = @player.status
-    if @status.track_id
-      @current_track = Track.find(@status.track_id)
-      @status.track_length = @current_track.length
-    end
+    @status.track = Track.find(@status.track_id) if @status.track_id
   end
   
 end

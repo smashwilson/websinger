@@ -1,5 +1,6 @@
 .player
-  %p.error= @player.error
+  - if @player.error
+    %p.error= @player.error
   %p.controls
     = command_link 'pause', @player.playing?
     = command_link 'play', ! @player.playing?
@@ -8,5 +9,5 @@
     %span.artist= @status.artist
     %span.title= @status.title
   .progress
-    .bar{ :style => "width: #{percent_complete}%" }
-    %span= time_s
+    .bar{ :style => "width: #{@status.percent_complete}%" }
+    %span= @status.progress_s

@@ -35,6 +35,8 @@ class Status
   attr_accessor :title, :artist, :album, :track_number, :track_id
   attr_accessor :seconds, :track_length, :volume
   
+  attr_accessor :track
+  
   attr_accessor :playback_state
   
   def initialize
@@ -43,9 +45,12 @@ class Status
     @volume = 0
   end
   
-  def seconds_s
-    minutes = @seconds.to_i / 60
-    "#{minutes}:#{(@seconds - minutes * 60).to_i.to_s.rjust(2, '0')}"
+  def percent_complete
+    @track ? (@seconds / @track.length) * 100 : 0
+  end
+  
+  def progress_s
+    @track ? "#{to_minutes_s @seconds} / #{to_minutes_s @track.length}" : '0:00 / 0:00'
   end
   
   def clear
@@ -67,6 +72,28 @@ class Status
     true
   end
   
+  def to_hash
+    { :playback_state => @playback_state,
+      :artist => @artist,
+      :album => @album,
+      :title => @title,
+      :track_number => @track_number,
+      :track_id => @track_id,
+      :seconds => @seconds,
+      :volume => @volume,
+      :progress => progress_s,
+      :percent_complete => percent_complete }
+  end
+  
+  protected
+
+  def to_minutes_s seconds
+    minutes = seconds.to_i / 60
+    "#{minutes}:#{(seconds - minutes * 60).to_i.to_s.rjust(2, '0')}"
+  end
+  
+  public
+  
   def self.stopped
     inst = new
     inst.playback_state = :stopped
@@ -76,7 +103,9 @@ class Status
   
   def self.from hash
     inst = new
-    hash.each { |k,v| inst.send("#{k}=".to_sym, v) }
+    hash.each do |k,v|
+      inst.send("#{k}=".to_sym, v) if inst.respond_to? "#{k}="
+    end
     inst
   end
 end

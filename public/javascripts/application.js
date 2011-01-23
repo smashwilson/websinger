@@ -14,14 +14,6 @@ function beat() {
   $(heartbeatCallbacks).each(function () { this() })
 }
 
-// A utility function to format a duration in seconds as "MM:SS"
-function toMinutes(seconds) {
-  minutes = Math.floor(seconds / 60)
-  left = Math.round(seconds - (minutes * 60))
-  if( left < 10 ) { left = '0' + left }
-  return minutes + ':' + left
-}
-
 $(function() {
 
   // By default, AJAX function responses should render in the #success or #failure divs of the application layout.
@@ -61,13 +53,8 @@ $(function() {
     
       $('.player .track .artist').html(status.artist)
       $('.player .track .title').html(status.title)
-      
-      if( 'track_length' in status ) {
-        percent = (status.seconds / status.track_length) * 100
-        timeString = toMinutes(status.seconds) + ' / ' + toMinutes(status.track_length)
-      }
-      $('.player .progress .bar').css('width', percent + '%')
-      $('.player .progress span').html(timeString)
+      $('.player .progress .bar').css('width', status.percent_complete + '%')
+      $('.player .progress span').html(status.progress)
     })
   }
   $('.player .controls a').bind('click', function () { refreshPlayer() })

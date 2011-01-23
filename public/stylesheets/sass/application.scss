@@ -88,6 +88,8 @@ $logoheight: 100px;
   .disable { display: none }
   
   .error {
+    position: absolute ;
+    right: 7% ;
     color: darken(red, 30%) ;
     border: 2px outset red ;
     padding: 2px 5px ;
