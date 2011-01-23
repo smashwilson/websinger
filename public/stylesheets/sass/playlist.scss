@@ -1,0 +1,14 @@
+/* Playlist */
+
+ol.playlist {
+  margin: 10px 0 ;
+
+  .handle {
+    cursor: n-resize ;
+    margin: 0 4px ;
+  }
+}
+
+ol.playlist.dragging-disabled .handle {
+  cursor: wait ;
+}

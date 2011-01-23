@@ -3,6 +3,8 @@ $heading: 100px;
 $headingpad: 10px;
 $headingheight: $heading - (2 * $headingpad);
 
+$logoheight: 100px;
+
 /* Globally applicable styles */
 
 * {
@@ -22,14 +24,11 @@ $headingheight: $heading - (2 * $headingpad);
   border-bottom: outset 2px gray ;
   
   h1 {
-    text-align: center ;
-  }
-  
-  .player {
-    font-style: italic ;
+    margin-bottom: 0 - $logoheight ;
   }
   
   ul.navigation {
+    margin-top: $logoheight ;
     list-style: none ;
     
     li {
@@ -43,11 +42,12 @@ $headingheight: $heading - (2 * $headingpad);
   padding: 1em 5% 0 ;
   
   h2 {
-    color: #333 ;
-    font-size: 110% ;
+    color: #888 ;
+    font-size: 200% ;
+    font-weight: normal ;
     font-style: italic ;
     font-variant: small-caps ;
-    letter-spacing: 2px ;
+    letter-spacing: 4px ;
     margin: 0.5em 0 0.5em -1em ;
   }
 }
@@ -82,21 +82,47 @@ $headingheight: $heading - (2 * $headingpad);
 /* Player */
 
 .player {
+  width: 70% ;
+  float: right ;
+
   .disable { display: none }
   
+  .error {
+    color: darken(red, 30%) ;
+    border: 2px outset red ;
+    padding: 2px 5px ;
+    background-color: lighten(red, 40%) ;
+  }
+  
+  .controls {
+    font-size: 110% ;
+    float: left ;
+    text-align: center ;
+    width: 20% ;
+    padding: 5px ;
+  }
+  
+  .track {
+    font-size: 110% ;
+    margin-left: 1em ;
+    padding: 5px ;
+    background: none ;
+  }
+  
   .progress {
+    clear: both ;
     position: relative ;
     font-weight: bold ;
     text-align: center ;
-    width: 100% ;
-    background: #eef ;
+    background: white ;
+    margin: 5px ;
     border: inset 2px black ;
     .bar {
       position: absolute ;
       left: 0 ;
       top: 0 ;
       bottom: 0 ;
-      background: blue ;
+      background: #ddf ;
       z-index: 1 ;
     }
     span {
@@ -108,7 +134,7 @@ $headingheight: $heading - (2 * $headingpad);
 
 /* Tracks */
 
-.tracks li, .playlist li {
+.tracks li, .playlist li , .track {
   background: #ddf ;
   padding: 3px 10px ;
   margin: 2px 0 ;
@@ -132,40 +158,4 @@ $headingheight: $heading - (2 * $headingpad);
     font-style: italic ;
     margin-right: 2px ;
   }
-}
-
-/* Track browsing */
-
-form {
-  margin: 1em 0 ;
-}
-
-.page-entries-info {
-  margin: 0.5em 0 ;
-  font-style: italic ;
-  text-align: center ;
-}
-
-ul.tracks {
-  margin: 5px 0 ;
-}
-
-.pagination {
-  margin: 0.5em 0 ;
-  text-align: center ;
-}
-
-/* Playlist */
-
-ol.playlist {
-  margin: 10px 0 ;
-
-  .handle {
-    cursor: n-resize ;
-    margin: 0 4px ;
-  }
-}
-
-ol.playlist.dragging-disabled .handle {
-  cursor: wait ;
 }
