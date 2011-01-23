@@ -7,5 +7,7 @@
   - @tracks.each do |track|
     %li
       = render :partial => 'track', :object => track
-      = link_to 'enqueue', enqueue_playlist_path(track), :method => 'POST', :remote => true
+      = link_to 'enqueue', enqueue_playlist_path(track), :class => 'enqueue', :method => 'POST', :remote => true
 = will_paginate @tracks
+- content_for :head do
+  = javascript_include_tag tracks_path

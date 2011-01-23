@@ -1,0 +1,10 @@
+$(function () {
+
+  // Change 'enqueue' link to 'enqueueing...' while the enqueueing is in progress.
+  $('.enqueue').click(function () {
+    $(this).html('enqueueing...')
+  }).bind('ajax:success', function () {
+    $(this).html('enqueue')
+  })
+
+})

@@ -1,6 +1,6 @@
 $(function () {
   // If true, the user is rearranging the playlist.
-  var dragInProgress = false
+  var suppressUpdate = false
 
   // Make the playlist sortable.
   $('.playlist').sortable({
@@ -15,7 +15,7 @@ $(function () {
   
   // Executed when a drag operation starts.
   function startDrag(event, ui) {
-    dragInProgress = true
+    suppressUpdate = true
   }
 
   // Executed when a playlist drag operation has been finished.
@@ -24,7 +24,7 @@ $(function () {
       type: 'PUT',
       url: '<%= playlist_path %>',
       data: $('.playlist').sortable('serialize'),
-      complete: function() { dragInProgress = false }
+      complete: function() { suppressUpdate = false }
     })
   }
   
@@ -56,19 +56,27 @@ $(function () {
   // refreshed.  Update the playlist after a delete operation completes (successfully or otherwise).
   $('.playlist').bind('ajax:complete', function(event, xhr) {
     reloadPlaylist()
+    suppressUpdate = false
   })
   
+  // A callback to fire when 'remove' links are clicked.
+  function changeLinkText() {
+    suppressUpdate = true
+    $(this).html('removing...')
+  }
+  $('.playlist a').click(changeLinkText);
+  
   // Asynchronously refresh the playlist, disabling drag-and-drop while doing so.
-  function reloadPlaylist(andThen) {
+  function reloadPlaylist() {
     $('.playlist').addClass('dragging-disabled').sortable('disable')
     $('.playlist').load('<%= playlist_path %>', function () {
+      $('.playlist a').click(changeLinkText);
       $('.playlist').removeClass('dragging-disabled').sortable('enable')
-      if(andThen) { andThen() }
     })
   }
 
   // Periodically update the playlist contents, unless something is in the midst of being drag-and-dropped.
   heartbeat(function () {
-    if(! dragInProgress) { reloadPlaylist() }
+    if(! suppressUpdate) { reloadPlaylist() }
   })
 })
