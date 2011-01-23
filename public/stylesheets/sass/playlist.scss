@@ -12,3 +12,36 @@ ol.playlist {
 ol.playlist.dragging-disabled .handle {
   cursor: wait ;
 }
+
+form.quick-add {
+  text-align: right ;
+}
+
+#track-name {
+  font-size: 90% ;
+  width: 400px ;
+}
+
+#add-button {
+  width: 5em ;
+}
+
+/* Autocomplete */
+
+ul.ui-autocomplete {
+  font-size: 90% ;
+  width: 400px ;
+  border: solid 1px blue ;
+  background: white ;
+  list-style: none ;
+  
+  li.ui-menu-item a {
+    display: block ;
+    width: 394px ;
+    padding: 2px 3px ;
+  }
+  
+  li.ui-menu-item a.ui-state-hover {
+    background: #ddf ;
+  }
+}

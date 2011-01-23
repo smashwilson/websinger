@@ -11,6 +11,9 @@ Websinger::Application.routes.draw do
     get 'in-album/:name' => 'tracks#show_album',
       :on => :collection,
       :as => 'album'
+    get 'autocomplete' => 'tracks#autocomplete',
+      :on => :collection,
+      :as => 'autocomplete'
   end
   
   root :to => redirect('/playlist')

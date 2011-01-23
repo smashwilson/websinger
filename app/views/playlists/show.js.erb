@@ -28,10 +28,32 @@ $(function () {
     })
   }
   
-  // Bind "remove" link events on the list parent to avoid re-attaching event handlers every time the playlist is
-  // refreshed.
+  // Enable the Add button when a track is chosen from the autocomplete box.
+  $('#track-name').bind( 'autocompleteselect', function() {
+    $('#add-button').attr('disabled', false)
+  })
   
-  // Update the playlist after a delete operation completes (successfully or otherwise).
+  // When the Add button is clicked, submit an enqueue request with the id of the selected track.
+  $('#add-button').click(function () {
+    var trackId = $('#track-id').attr('value')
+    var enqueuePath = '<%= enqueue_playlist_path(0) %>'.replace(/0/, trackId)
+    
+    $.ajax({
+      type: 'POST',
+      url: enqueuePath,
+      complete: function() {
+        $('#track-id').attr('value', null)
+        $('#add-button').attr('disabled', true)
+        $('#track-name').attr('value', '')
+        reloadPlaylist()
+      }
+    })
+    
+    return false
+  })
+  
+  // Bind "remove" link events on the list parent to avoid re-attaching event handlers every time the playlist is
+  // refreshed.  Update the playlist after a delete operation completes (successfully or otherwise).
   $('.playlist').bind('ajax:complete', function(event, xhr) {
     reloadPlaylist()
   })
