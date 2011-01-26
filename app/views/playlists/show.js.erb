@@ -59,7 +59,8 @@ $(function () {
     }
     suppressUpdate = true
     $(event.target).html('removing...')
-  }).bind('ajax:complete', function(event, xhr) {
+  })
+  $('.playlist').bind('ajax:complete', function(event, xhr) {
     $(event.target).html('removed')
     reloadPlaylist()
     suppressUpdate = false
