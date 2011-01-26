@@ -34,10 +34,10 @@ class PlaylistsController < ApplicationController
   end
   
   def enqueue_all
-    tracks = Track.find param[:ids]
+    tracks = Track.find params[:ids]
     es = EnqueuedTrack.enqueue_all tracks
     
-    unless e.all? { |e| e.valid? }
+    unless es.all? { |e| e.valid? }
       summary = es.inject('') { |e,text| "#{text} #{e.errors.full_messages.join ' '}" }
       render :status => 500, :text => "Unable to enqueue tracks: #{summary}"
     end

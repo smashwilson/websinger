@@ -5,7 +5,8 @@
   %span.album= params[:album]
 .album-info
   = image_tag album_art_track_path(@tracks[0].id), :alt => 'Album art', :size => '300x296'
-  = link_to 'enqueue all'
+  = link_to 'enqueue all', enqueue_all_playlist_path(:ids => @tracks.map {|t| t.id }),
+      :class => 'enqueue', :method => 'POST', :remote => true
 %ul.tracks
   - @tracks.each do |track|
     %li
