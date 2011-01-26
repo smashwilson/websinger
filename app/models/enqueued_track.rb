@@ -7,21 +7,27 @@ class EnqueuedTrack < ActiveRecord::Base
     includes(:track).order(:position)
   end
   
-  # Atomically create a new EnqueuedTrack placing +track+ at the beginning or end of the existing playlist.  The
-  # EnqueuedTrack may have validation or other error conditions.
-  def self.enqueuement_of track, side = :bottom
+  def self.enqueue track, side = :bottom
+    (enqueue_all [track], side)[0]
+  end
+  
+  # Atomically create new EnqueuedTracks, placing each track in +tracks+ at the beginning or end of the existing
+  # playlist.  The EnqueuedTracks created and returned may have validation or other error conditions.
+  def self.enqueue_all tracks, side = :bottom
     transaction do
       pos = case side
         when :bottom ; (maximum(:position) || 0) + 1
-        when :top ; (minimum(:position) || 1) - 1
+        when :top ; (minimum(:position) || tracks.size) - tracks.size
         else ; raise "side must be :bottom or :top, not #{side}"
         end
 
-      inst = new
-      inst.track = track
-      inst.position = pos
-      inst.save
-      inst
+      tracks.map.with_index do |t, i|
+        inst = new
+        inst.track = t
+        inst.position = pos + i
+        inst.save
+        inst
+      end
     end
   end
 

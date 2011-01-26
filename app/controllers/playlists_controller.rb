@@ -20,21 +20,29 @@ class PlaylistsController < ApplicationController
     render :nothing => true
   end
 
-  # Enqueue a new track by track id.
+  # Enqueue a new track.
   def enqueue
     track = Track.find params[:id]
-
-    if track.nil?
-      render :status => 404, :text => "Track (#{params[:id]}) not found"
+    e = EnqueuedTrack.enqueue track
+    
+    unless e.valid?
+      render :status => 500, :text => "Unable to enqueue track: #{e.errors.full_messages.join ' '}"
       return
     end
 
-    e = EnqueuedTrack.enqueuement_of track
-    unless e.valid?
-      render :status => 500, :text => "Unable to enqueue track: #{e.errors.full_messages.join ' '}"
+    render :text => "#{track} has been added to the playlist."
+  end
+  
+  def enqueue_all
+    tracks = Track.find param[:ids]
+    es = EnqueuedTrack.enqueue_all tracks
+    
+    unless e.all? { |e| e.valid? }
+      summary = es.inject('') { |e,text| "#{text} #{e.errors.full_messages.join ' '}" }
+      render :status => 500, :text => "Unable to enqueue tracks: #{summary}"
     end
-
-    render :text => "#{track} has been added to the playlist at position #{e.position}."
+    
+    render :text => "#{tracks.size} tracks have been added to the playlist."
   end
 
   # Remove an existing EnqueuedTrack by *queue* id.
