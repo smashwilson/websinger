@@ -32,5 +32,6 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'haml'
 gem 'ruby-mp3info'
+gem 'ruby-filemagic'
 gem 'will_paginate', '3.0.pre2'
 gem 'rails3-jquery-autocomplete'
