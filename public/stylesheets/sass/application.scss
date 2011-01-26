@@ -1,9 +1,7 @@
-$heading: 100px;
+$heading: 120px;
 
-$headingpad: 10px;
+$headingpad: 20px;
 $headingheight: $heading - (2 * $headingpad);
-
-$logoheight: 100px;
 
 /* Globally applicable styles */
 
@@ -19,20 +17,20 @@ $logoheight: 100px;
   left: 0 ;
   right: 0 ;
   height: $headingheight ;
-  padding: $headingpad 7% ;
-  background: #eee ;
+  padding: $headingpad 5% ;
+  background: #fff ;
   border-bottom: outset 2px gray ;
   
-  h1 {
-    margin-bottom: 0 - $logoheight ;
-  }
-  
-  ul.navigation {
-    margin-top: $logoheight ;
-    list-style: none ;
-    
-    li {
-      display: inline ;
+  .panel {
+    width: 30% ;
+    text-align: center ;
+    ul.navigation {
+      padding-left: 70px ;
+      list-style: none ;
+      li {
+        margin: 0 5px ;
+        display: inline ;
+      }
     }
   }
 }
@@ -67,9 +65,9 @@ $logoheight: 100px;
 }
 
 #success {
-  color: darken(green, 30%) ;
+  color: #030 ;
   border-color: green ;
-  background-color: lighten(green, 40%) ;
+  background-color: #cfc ;
 }
 
 #failure {
@@ -118,7 +116,7 @@ $logoheight: 100px;
     text-align: center ;
     background: white ;
     margin: 5px ;
-    border: inset 2px black ;
+    border: inset 2px gray ;
     .bar {
       position: absolute ;
       left: 0 ;
