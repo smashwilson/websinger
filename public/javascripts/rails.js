@@ -49,7 +49,7 @@ jQuery(function ($) {
                         dataType: dataType,
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
-                            if ($this.triggerHandler('ajax:beforeSend') === false) {
+                            if ($this.triggerAndReturn('ajax:beforeSend') === false) {
                               return false;
                             }
                            // if user has used jQuery.ajaxSetup then call beforeSend callback

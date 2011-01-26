@@ -39,7 +39,7 @@ $(function() {
   
   // Update the player state.
   function refreshPlayer() {
-    $.getJSON('player', function (status) {
+    $.getJSON('/player', function (status) {
       var percent = 0
       var timeString = ''
       
