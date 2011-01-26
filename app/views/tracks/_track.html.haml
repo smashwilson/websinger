@@ -1,4 +1,4 @@
 %span.artist= track.artist
 %span.title= track.title
-%span.album= track.album
+= link_to track.album, album_tracks_path(:artist => track.artist, :album => track.album), :class => 'album'
 %span.track-number= track.track_number

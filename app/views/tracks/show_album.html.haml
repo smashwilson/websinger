@@ -1,2 +1,15 @@
-<h1>Track#show_album</h1>
-<p>Find me in app/views/track/show_album.html.erb</p>
+%h2 album
+%h3
+  %span.artist= params[:artist]
+  \/
+  %span.album= params[:album]
+.album-info
+  = image_tag album_art_track_path(@tracks[0].id), :alt => 'Album art', :size => '300x296'
+  = link_to 'enqueue all'
+%ul.tracks
+  - @tracks.each do |track|
+    %li
+      = render :partial => 'track', :object => track
+      = link_to 'enqueue', enqueue_playlist_path(track), :class => 'enqueue', :method => 'POST', :remote => true
+- content_for :head do
+  = javascript_include_tag tracks_path
