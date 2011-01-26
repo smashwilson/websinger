@@ -1,4 +1,5 @@
 %h2 playlist
+= link_to 'clear', clear_playlist_path, :class => 'clear', :method => 'DELETE', :remote => true
 = form_tag(nil, :class => 'quick-add') do
   = autocomplete_field_tag 'track-name', '', autocomplete_tracks_path, :size => 30, :id_element => '#track-id'
   = hidden_field_tag('track-id')

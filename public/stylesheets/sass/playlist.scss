@@ -1,17 +1,4 @@
-/* Playlist */
-
-ol.playlist {
-  margin: 10px 0 ;
-
-  .handle {
-    cursor: n-resize ;
-    margin: 0 4px ;
-  }
-}
-
-ol.playlist.dragging-disabled .handle {
-  cursor: wait ;
-}
+/* Quick addition form */
 
 form.quick-add {
   text-align: right ;
@@ -26,7 +13,7 @@ form.quick-add {
   width: 5em ;
 }
 
-/* Autocomplete */
+/* Autocomplete results */
 
 ul.ui-autocomplete {
   font-size: 90% ;
@@ -44,4 +31,23 @@ ul.ui-autocomplete {
   li.ui-menu-item a.ui-state-hover {
     background: #ddf ;
   }
+}
+
+/* Playlist */
+
+.clear {
+  float: left ;
+}
+
+ol.playlist {
+  margin: 10px 0 ;
+
+  .handle {
+    cursor: n-resize ;
+    margin: 0 4px ;
+  }
+}
+
+ol.playlist.dragging-disabled .handle {
+  cursor: wait ;
 }

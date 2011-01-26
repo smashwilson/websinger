@@ -58,4 +58,11 @@ class PlaylistsController < ApplicationController
     render :text => "#{e.track} has been removed from the playlist."
   end
 
+  # Clear the entire playlist.
+  def clear
+    EnqueuedTrack.delete_all
+
+    render :text => "Playlist cleared."
+  end
+
 end

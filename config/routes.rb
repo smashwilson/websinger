@@ -6,6 +6,7 @@ Websinger::Application.routes.draw do
     post 'enqueue' => 'playlists#enqueue', :as => 'enqueue'
     post 'enqueue-all' => 'playlists#enqueue_all', :as => 'enqueue_all'
     delete 'dequeue' => 'playlists#dequeue', :as => 'dequeue'
+    delete :clear
   end
   
   resources :tracks, :only => [:index] do
