@@ -22,11 +22,11 @@ class AlbumArt
   
   # Create a new instance from album art embedded in the mp3 metadata of a track.
   def self.from_metadata metadata
-    tag2 = mp3.tag2
+    tag2 = metadata.tag2
     return nil unless tag2
     apic = tag2.APIC
     return nil unless apic
-      
+
     data = apic.unpack('c Z* c Z* a*')
     new data[4], data[1]
   end

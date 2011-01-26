@@ -9,11 +9,11 @@ class Track < ActiveRecord::Base
   def to_s
     "#{artist} - #{title}"
   end
-  
+
   # Return the AlbumArt object associated with this track, if possible, or nil if none
   # can be found.
   def album_art
-    art = AlbumArt.from_metadata(path)
+    art = Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
     art ||= AlbumArt.from_directory(File.dirname path)
     art
   end
@@ -25,13 +25,18 @@ class Track < ActiveRecord::Base
     ts.order(:artist, :album, :track_number)
   end
 
+  # Return all tracks in the specified album, ordered by track number.
+  def self.in_album artist_name, album_name
+    where(:artist => artist_name, :album => album_name).order(:track_number)
+  end
+
   # Create a new instance based on the IDv3 tag of the file at +path+.
   def self.read_from path
     inst = new
     inst.path = path
     Mp3Info.open(path) do |mp3|
       inst.length = mp3.length
-      
+
       tag = mp3.tag
       inst.title = tag.title
       inst.artist = tag.artist

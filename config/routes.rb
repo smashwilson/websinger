@@ -8,12 +8,14 @@ Websinger::Application.routes.draw do
   end
   
   resources :tracks, :only => [:index] do
-    get 'in-album/:name' => 'tracks#show_album',
-      :on => :collection,
-      :as => 'album'
-    get 'autocomplete' => 'tracks#autocomplete',
-      :on => :collection,
-      :as => 'autocomplete'
+    member do
+      get 'album-art' => 'tracks#album_art', :as => 'album_art'
+    end
+
+    collection do
+      get 'in-album/:artist/:album' => 'tracks#show_album', :as => 'album'
+      get 'autocomplete' => 'tracks#autocomplete', :as => 'autocomplete'
+    end
   end
   
   root :to => redirect('/playlist')

@@ -12,6 +12,13 @@ class TracksController < ApplicationController
   end
 
   def show_album
+    @tracks = Track.in_album(params[:artist], params[:album])
+  end
+
+  def album_art
+    @track = Track.find(params[:id])
+    art = @track.album_art
+    send_data art.image, :type => art.mime_type, :disposition => 'inline'
   end
 
 end
