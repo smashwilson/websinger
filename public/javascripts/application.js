@@ -43,6 +43,8 @@ $(function() {
       var percent = 0
       var timeString = ''
       
+      $('.player .controls a').removeClass('submitted')
+      
       if( status.playback_state != 'playing' ) {
         $('#command_play').removeClass('disable')
         $('#command_pause').addClass('disable')
@@ -57,7 +59,11 @@ $(function() {
       $('.player .progress span').html(status.progress)
     })
   }
-  $('.player .controls a').bind('click', function () { refreshPlayer() })
+  
+  $('.player .controls a').click(function () {
+    $(this).addClass('submitted')
+    refreshPlayer()
+  })
   
   heartbeat(refreshPlayer);
   

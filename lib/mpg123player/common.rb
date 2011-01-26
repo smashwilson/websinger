@@ -32,7 +32,7 @@ end
 Commands = ['play', 'pause', 'stop', 'shutdown']
 
 class Status
-  attr_accessor :title, :artist, :album, :track_number, :track_id
+  attr_accessor :title, :artist, :album, :track_id
   attr_accessor :seconds, :track_length, :volume
   
   attr_accessor :track
@@ -54,7 +54,7 @@ class Status
   end
   
   def clear
-    @title = @artist = @album = @track_number = @track_id = nil
+    @title = @artist = @album = @track_id = nil
     @seconds = 0
   end
   
@@ -62,7 +62,6 @@ class Status
     return false unless @title == other.title
     return false unless @artist == other.artist
     return false unless @album == other.album
-    return false unless @track_number == other.track_number
     return false unless @track_id == other.track_id
     return false unless @volume == other.volume
     return false unless @playback_state == other.playback_state
@@ -77,7 +76,6 @@ class Status
       :artist => @artist,
       :album => @album,
       :title => @title,
-      :track_number => @track_number,
       :track_id => @track_id,
       :seconds => @seconds,
       :volume => @volume,

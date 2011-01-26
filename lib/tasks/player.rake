@@ -14,7 +14,7 @@ namespace :websinger do
       if server.stay_stopped
         # Re-enqueue the previously playing track.
         t = Track.find(server.last_track_id)
-        EnqueuedTrack.enqueuement_of(t, :top)
+        EnqueuedTrack.enqueue(t, :top)
       end
       e = nil
       e = EnqueuedTrack.top unless server.stay_stopped
