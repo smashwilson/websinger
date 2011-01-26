@@ -6,4 +6,5 @@
 %ol.playlist
   = render :partial => 'playlist', :object => @playlist
 - content_for :head do
+  = stylesheet_link_tag 'playlist.css'
   = javascript_include_tag playlist_path
