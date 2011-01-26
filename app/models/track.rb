@@ -10,13 +10,12 @@ class Track < ActiveRecord::Base
     "#{artist} - #{title}"
   end
   
-  def length_s
-    minutes = length.to_i / 60
-    "#{minutes}:#{(length - minutes * 60).to_i.to_s.rjust(2, '0')}"
-  end
-  
-  def percent_complete seconds
-    (seconds / length) * 100
+  # Return the AlbumArt object associated with this track, if possible, or nil if none
+  # can be found.
+  def album_art
+    art = AlbumArt.from_metadata(path)
+    art ||= AlbumArt.from_directory(File.dirname path)
+    art
   end
   
   # Return all tracks with a title, album, or artist name matching a query term.
