@@ -1,0 +1,32 @@
+/* Styles for the "show album" view. */
+
+h3 {
+  color: #888 ;
+  font-size: 130% ;
+  font-weight: normal ;
+  margin-bottom: 30px ;
+  text-align: center ;
+  
+  span {
+    color: black ;
+  }
+  
+  .artist {
+    font-weight: bold ;
+    letter-spacing: 2px ;
+  }
+}
+
+.album-info {
+  float: left ;
+  text-align: center ;
+  width: 300px ;
+  
+  img {
+    border: solid 2px black ;
+  }
+}
+
+.tracks {
+  margin-left: 325px ;
+}

@@ -1,7 +1,7 @@
 %h2 album
 %h3
   %span.artist= params[:artist]
-  \/
+  \//
   %span.album= params[:album]
 .album-info
   = image_tag album_art_track_path(@tracks[0].id), :alt => 'Album art', :size => '300x296'
@@ -12,4 +12,5 @@
       = render :partial => 'track', :object => track
       = link_to 'enqueue', enqueue_playlist_path(track), :class => 'enqueue', :method => 'POST', :remote => true
 - content_for :head do
+  = stylesheet_link_tag 'album.css'
   = javascript_include_tag tracks_path
