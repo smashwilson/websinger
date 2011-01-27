@@ -10,7 +10,7 @@ namespace :websinger do
     root = args.path || '.'
     verbose = args.verbose || false
     discovered_count = 0
-    duplicate_count = 0
+    error_count = 0
     
     puts "Adding tracks from: #{root}"
     puts "Verbose: #{verbose}"
@@ -23,8 +23,9 @@ namespace :websinger do
         message = "Discovered: #{path}"
         discovered_count += 1
       else
-        message = "Duplicate: #{path}"
-        duplicate_count += 1
+        message = "Not added: #{path}\n\t"
+        message += t.errors.full_messages.join(', ')
+        error_count += 1
       end
       
       puts message if verbose
@@ -32,7 +33,7 @@ namespace :websinger do
     
     puts "Complete.  Found:"
     puts "  #{discovered_count} new tracks" if discovered_count > 0
-    puts "  #{duplicate_count} duplicates" if duplicate_count > 0
+    puts "  #{error_count} not added" if error_count > 0
   end
 
 end
