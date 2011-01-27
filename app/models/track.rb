@@ -2,7 +2,8 @@ require 'mp3info'
 
 class Track < ActiveRecord::Base
   validates_uniqueness_of :path
-  validates_uniqueness_of :title, :uniqueness => { :scope => :artist }
+  validates_uniqueness_of :title, :scope => [:artist, :album]
+  validates_presence_of :title
   
   has_many :enqueued_tracks
   
