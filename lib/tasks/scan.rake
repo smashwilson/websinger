@@ -34,10 +34,11 @@ namespace :websinger do
           next
         end
         
-        # Remove the existing record for this path, if one is present.
-        action = Track.destroy_all(:path => path).empty? ? 'Discovered' : 'Updated'
+        # Update the existing record corresponding to this path, if one is present.
+        t = Track.find_or_initialize_by_path(path)
+        action = t.persisted? ? 'Updated' : 'Discovered'
         
-        t = Track.read_from path
+        t.update_from_path path
         if t.save
           message = "#{action}: #{path}"
 

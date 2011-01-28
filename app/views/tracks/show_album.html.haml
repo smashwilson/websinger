@@ -1,11 +1,11 @@
 %h2 album
 %h3
-  %span.artist= params[:artist]
+  %span.artist= @track.artist
   \//
-  %span.album= params[:album]
+  %span.album= @track.album
 .album-info
-  = image_tag album_art_track_path(@tracks[0].id), :alt => 'Album art', :size => '300x296'
-  = link_to 'enqueue all', enqueue_all_playlist_path(:ids => @tracks.map {|t| t.id }),
+  = image_tag album_art_track_path(@track.id), :alt => 'Album art', :size => '300x296'
+  = link_to 'enqueue all', enqueue_all_playlist_path(:ids => @track_ids),
       :class => 'enqueue', :method => 'POST', :remote => true
 %ul.tracks
   - @tracks.each do |track|

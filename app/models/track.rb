@@ -4,7 +4,7 @@ class Track < ActiveRecord::Base
   validates_uniqueness_of :path
   validates_uniqueness_of :title, :scope => [:artist, :album]
   validates_presence_of :title
-  
+
   has_many :enqueued_tracks
   
   def to_s
@@ -19,6 +19,25 @@ class Track < ActiveRecord::Base
     art
   end
   
+  def update_from_path p
+    self.path = p
+    Mp3Info.open(p) do |mp3|
+      self.length = mp3.length
+
+      tag = mp3.tag
+      self.title = tag.title
+
+      self.artist = tag.artist
+      self.artist_slug = self.artist.to_url if self.artist
+
+      self.album = tag.album
+      self.album_slug = self.album.to_url if self.album
+
+      self.track_number = tag.tracknum
+      self.disc_number = tag.discnum
+    end
+  end
+
   # Return all tracks with a title, album, or artist name matching a query term.
   # If +term+ is nil, all tracks will be returned.
   def self.matching term
@@ -27,24 +46,7 @@ class Track < ActiveRecord::Base
   end
 
   # Return all tracks in the specified album, ordered by track number.
-  def self.in_album artist_name, album_name
-    where(:artist => artist_name, :album => album_name).order(:track_number)
-  end
-
-  # Create a new instance based on the IDv3 tag of the file at +path+.
-  def self.read_from path
-    inst = new
-    inst.path = path
-    Mp3Info.open(path) do |mp3|
-      inst.length = mp3.length
-
-      tag = mp3.tag
-      inst.title = tag.title
-      inst.artist = tag.artist
-      inst.album = tag.album
-      inst.track_number = tag.tracknum
-      inst.disc_number = tag.discnum
-    end
-    inst
+  def self.in_album artist_slug, album_slug
+    where(:artist_slug => artist_slug, :album_slug => album_slug).order(:track_number)
   end
 end

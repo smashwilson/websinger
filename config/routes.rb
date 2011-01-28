@@ -15,7 +15,7 @@ Websinger::Application.routes.draw do
     end
 
     collection do
-      get 'in-album/:artist/:album' => 'tracks#show_album', :as => 'album'
+      get 'in-album/:artist_slug/:album_slug' => 'tracks#show_album', :as => 'album'
       get 'autocomplete' => 'tracks#autocomplete', :as => 'autocomplete'
     end
   end

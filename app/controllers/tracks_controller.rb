@@ -12,7 +12,14 @@ class TracksController < ApplicationController
   end
 
   def show_album
-    @tracks = Track.in_album(params[:artist], params[:album])
+    @tracks = Track.in_album(params[:artist_slug], params[:album_slug])
+    if @tracks.empty?
+      render :status => 404, :text => 'Unknown album.'
+      return
+    end
+
+    @track = @tracks[0]
+    @track_ids = @tracks.map { |t| t.id }
   end
 
   def album_art

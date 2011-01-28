@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110123195119) do
+ActiveRecord::Schema.define(:version => 20110128212303) do
 
   create_table "enqueued_tracks", :force => true do |t|
     t.integer  "position"
@@ -29,10 +29,14 @@ ActiveRecord::Schema.define(:version => 20110123195119) do
     t.string   "path"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "album_slug"
+    t.string   "artist_slug"
   end
 
   add_index "tracks", ["album"], :name => "index_tracks_on_album"
+  add_index "tracks", ["album_slug"], :name => "index_tracks_on_album_slug"
   add_index "tracks", ["artist"], :name => "index_tracks_on_artist"
+  add_index "tracks", ["artist_slug"], :name => "index_tracks_on_artist_slug"
   add_index "tracks", ["title"], :name => "index_tracks_on_title"
 
 end
