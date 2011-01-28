@@ -11,7 +11,7 @@
   - @tracks.each do |track|
     %li
       = render :partial => 'track', :object => track
-      = link_to 'enqueue', enqueue_playlist_path(track), :class => 'enqueue', :method => 'POST', :remote => true
+      = link_to 'enqueue', enqueue_playlist_path(:id => track), :class => 'enqueue', :method => 'POST', :remote => true
 - content_for :head do
   = stylesheet_link_tag 'album.css'
   = javascript_include_tag tracks_path
