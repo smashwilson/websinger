@@ -28,10 +28,10 @@ class Track < ActiveRecord::Base
       self.title = tag.title
 
       self.artist = tag.artist
-      self.artist_slug = self.artist.to_url if self.artist
+      self.artist_slug = self.artist.encode('utf-8').to_url if self.artist
 
       self.album = tag.album
-      self.album_slug = self.album.to_url if self.album
+      self.album_slug = self.album.encode('utf-8').to_url if self.album
 
       self.track_number = tag.tracknum
       self.disc_number = tag.discnum
