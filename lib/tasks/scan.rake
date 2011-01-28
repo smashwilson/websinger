@@ -10,7 +10,9 @@ namespace :websinger do
     root = args.path || '.'
     verbose = args.verbose || false
     error_file = args.error_file || 'scan-errors.log'
+    
     discovered_count = 0
+    updated_count = 0
     error_count = 0
     
     puts "Adding tracks from: #{root}"
@@ -27,10 +29,15 @@ namespace :websinger do
           puts message if verbose
         end
         
+        # Remove the existing record for this path, if one is present.
+        action = Track.destroy_all(:path => path).empty? ? 'Discovered' : 'Updated'
+        
         t = Track.read_from path
         if t.save
-          message = "Discovered: #{path}"
-          discovered_count += 1
+          message = "#{action}: #{path}"
+
+          discovered_count += 1 if action == 'Discovered'
+          updated_count += 1 if action == 'Updated'
         else
           message = "Not added: #{path}"
           
@@ -46,6 +53,7 @@ namespace :websinger do
     
     puts "Complete.  Found:"
     puts "  #{discovered_count} new tracks" if discovered_count > 0
+    puts "  #{updated_count} updated tracks" if updated_count > 0
     puts "  #{error_count} problems" if error_count > 0
   end
 
