@@ -24,9 +24,14 @@ namespace :websinger do
         begin
           next unless path =~ /\.mp3$/
         rescue ArgumentError => e
-          message = "Not added: #{path}\t#{e}"
+          error_count += 1
+          message = "Not added: #{path}"
+
           efile.puts message
+          efile.puts " #{e.class}:#{e}"
           puts message if verbose
+          
+          next
         end
         
         # Remove the existing record for this path, if one is present.
