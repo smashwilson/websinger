@@ -130,6 +130,8 @@ MSG
   def start_player
     @pipe = IO.popen("#{@player_path} -R -", 'w+')
     @parsing_thread = Thread.new { process_line(@pipe.gets) until @pipe.eof? || @shutting_down }
+
+    Signal.trap('TERM') { Process.kill 'TERM', @pipe.pid }
   end
   
   # Parse MPG123 remote interface output.
