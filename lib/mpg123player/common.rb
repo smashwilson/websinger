@@ -5,8 +5,10 @@ module Configuration
     def player_path ; @player_path || '/usr/bin/mpg123' ; end
     def pid_path ; @pid_path || '/var/websinger/player.pid' ; end
     def status_path ; @status_path || '/var/websinger/status.yaml' ; end
+    def log_path ; @log_path || '/var/websinger/player.log' ; end
+    def error_log_path ; @error_log_path || '/var/websinger/errors.log' ; end
     def server_port ; @server_port || 12340 ; end
-    
+
     def player_path= path ; @player_path = path ; end
     def pid_path= path ; @pid_path = path ; end
     def status_path= path ; @status_path = path ; end
@@ -15,16 +17,21 @@ module Configuration
     def base_path= path
       @status_path = "#{path}/status.yaml"
       @pid_path = "#{path}/player.pid"
+      @log_path = "#{path}/player.log"
+      @error_log_path = "#{path}/errors.log"
     end
   end
 end
 
 module Configurable
+  attr_accessor :log_path, :error_log_path
   
   def configure
     @player_path = Configuration.player_path
     @status_path = Configuration.status_path
     @pid_path = Configuration.pid_path
+    @log_path = Configuration.log_path
+    @error_log_path = Configuration.error_log_path
     @server_port = Configuration.server_port
   end
 end

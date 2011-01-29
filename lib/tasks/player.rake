@@ -6,9 +6,13 @@ namespace :websinger do
   desc 'The MP3 player daemon.  Should be managed by init.'
   task :player => :environment do
     require 'mpg123player/server'
-    
+
     server = Mpg123Player::Server.new
     POLL_TIME = 1 # seconds (may be fractional)
+
+    # Redirect stdout and stderr to log files.
+    $stdout = File.open(server.log_path, 'a')
+    $stderr = File.open(server.error_log_path, 'a')
     
     server.advance do
       if server.stay_stopped
