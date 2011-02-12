@@ -1,13 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  title: MyString
-  artist: MyString
-  album: MyString
+  title: Song One
+  artist: Artist One
+  album: Album One
   track_number: 1
   disc_number: 1
-  length: 1
-  path: MyString
+  length: 100
+  path: test/fixtures/song-one.mp3
 
 two:
   title: MyString

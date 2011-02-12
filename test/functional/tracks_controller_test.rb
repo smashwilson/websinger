@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TrackControllerTest < ActionController::TestCase
+class TracksControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
