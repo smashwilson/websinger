@@ -22,7 +22,8 @@ class Track < ActiveRecord::Base
   def update_from_path p
     self.path = p
     rencode = lambda do |original|
-      original.encode('utf-8', :invalid => :replace, :undef => :replace) if original
+      next nil unless original
+      original.encode('utf-8', :invalid => :replace, :undef => :replace).gsub("\x00", "")
     end
     
     Mp3Info.open(p) do |mp3|
