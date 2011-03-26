@@ -18,22 +18,19 @@ namespace :websinger do
     puts "Adding tracks from: #{root}"
     puts "Verbose: #{verbose}"
     puts "Reporting problems to: #{error_file}"
-    
+
     File.open(error_file, 'a') do |efile|
       Find.find(root) do |path|
-        begin
-          next unless path =~ /\.mp3$/
-        rescue ArgumentError => e
+        unless path.valid_encoding?
           error_count += 1
           message = "Not added: #{path}"
-
-          efile.puts message
-          efile.puts " #{e.class}:#{e}"
-          puts message if verbose
           
-          next
+          efile.puts message
+          efile.puts " Invalid path encoding."
         end
-        
+
+        next unless path =~ /\.mp3$/
+
         # Update the existing record corresponding to this path, if one is present.
         t = Track.find_or_initialize_by_path(path)
         action = t.persisted? ? 'Updated' : 'Discovered'
