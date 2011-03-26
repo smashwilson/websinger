@@ -27,6 +27,7 @@ namespace :websinger do
           
           efile.puts message
           efile.puts " Invalid path encoding."
+          next
         end
 
         next unless path =~ /\.mp3$/
