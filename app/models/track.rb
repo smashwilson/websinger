@@ -25,12 +25,12 @@ class Track < ActiveRecord::Base
       self.length = mp3.length
 
       tag = mp3.tag
-      self.title = tag.title.encode('utf-8')
+      self.title = tag.title.encode('utf-8') if tag.title
 
-      self.artist = tag.artist.encode('utf-8')
+      self.artist = tag.artist.encode('utf-8') if tag.artist
       self.artist_slug = self.artist.to_url if self.artist
 
-      self.album = tag.album.encode('utf-8')
+      self.album = tag.album.encode('utf-8') if tag.album
       self.album_slug = self.album.to_url if self.album
 
       self.track_number = tag.tracknum
