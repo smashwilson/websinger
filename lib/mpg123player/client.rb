@@ -47,6 +47,9 @@ class Client
   rescue Errno::ESRCH => e
     @error = "The server died!"
     false
+  rescue Errno::EPERM => e
+    @error = "Someone else is running the server!"
+    false
   else
     true
   end

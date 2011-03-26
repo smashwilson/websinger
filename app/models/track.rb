@@ -22,8 +22,11 @@ class Track < ActiveRecord::Base
   def update_from_path p
     self.path = p
     rencode = lambda do |original|
-      next nil unless original
-      original.encode('utf-8', :invalid => :replace, :undef => :replace).gsub("\x00", "")
+      next nil if original.nil?
+      str = original.encode('utf-8', :invalid => :replace, :undef => :replace)
+      str.gsub!("\x00", "")
+      next nil if str.empty?
+      str
     end
     
     Mp3Info.open(p) do |mp3|
@@ -33,10 +36,10 @@ class Track < ActiveRecord::Base
       self.title = rencode.call(tag.title)
 
       self.artist = rencode.call(tag.artist)
-      self.artist_slug = self.artist.to_url if self.artist
+      self.artist_slug = self.artist ? self.artist.to_url : nil
 
       self.album = rencode.call(tag.album)
-      self.album_slug = self.album.to_url if self.album
+      self.album_slug = self.album ? self.album.to_url : nil
 
       self.track_number = tag.tracknum
       self.disc_number = tag.discnum
