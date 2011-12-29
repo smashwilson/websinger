@@ -25,7 +25,14 @@ class TracksController < ApplicationController
   def album_art
     @track = Track.find(params[:id])
     art = @track.album_art
-    send_data art.image, :type => art.mime_type, :disposition => 'inline'
+
+    # TODO use a default album image
+
+    if art && art.ok?
+      send_data art.image, :type => art.mime_type, :disposition => 'inline'
+    else
+      render :text => 'Missing album art', :status => 404
+    end
   end
 
 end

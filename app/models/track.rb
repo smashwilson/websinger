@@ -14,11 +14,13 @@ class Track < ActiveRecord::Base
   # Return the AlbumArt object associated with this track, if possible, or nil if none
   # can be found.
   def album_art
-    art = Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
-    art ||= AlbumArt.from_directory(File.dirname path)
+    art = AlbumArt.from_directory(File.dirname path)
+    if art.nil?
+      Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
+    end
     art
   end
-  
+
   def update_from_path p
     self.path = p
     rencode = lambda do |original|
