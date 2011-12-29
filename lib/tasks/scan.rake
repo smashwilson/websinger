@@ -4,17 +4,17 @@
 namespace :websinger do
 
   desc 'Discover new tracks to add to the music library.'
-  task :scan, :path, :verbose, :error_file, :needs => [:environment] do |t, args|
+  task :scan, [:path, :verbose, :error_file] => [:environment] do |t, args|
     require 'find'
-    
+
     root = args.path || '.'
     verbose = args.verbose || false
     error_file = args.error_file || 'scan-errors.log'
-    
+
     discovered_count = 0
     updated_count = 0
     error_count = 0
-    
+
     puts "Adding tracks from: #{root}"
     puts "Verbose: #{verbose}"
     puts "Reporting problems to: #{error_file}"
@@ -54,7 +54,7 @@ namespace :websinger do
         puts message if verbose
       end
     end
-    
+
     puts "Complete.  Found:"
     puts "  #{discovered_count} new tracks" if discovered_count > 0
     puts "  #{updated_count} updated tracks" if updated_count > 0
