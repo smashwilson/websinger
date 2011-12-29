@@ -28,7 +28,7 @@ class Track < ActiveRecord::Base
       next nil if str.empty?
       str
     end
-    
+
     Mp3Info.open(p) do |mp3|
       self.length = mp3.length
 
