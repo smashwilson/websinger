@@ -1,4 +1,5 @@
 require 'mp3info'
+require 'randumb'
 
 class Track < ActiveRecord::Base
   validates_uniqueness_of :path
@@ -49,14 +50,23 @@ class Track < ActiveRecord::Base
   end
 
   # Return all tracks with a title, album, or artist name matching a query term.
-  # If +term+ is nil, all tracks will be returned.
   def self.matching term
-    ts = term.blank? ? self : where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" })
-    ts.order(:artist, :album, :track_number)
+    where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" }).order(:artist, :album, :track_number)
+  end
+
+  # Choose a ramdom selection of #per_page sample tracks.
+  def self.sample
+    random(per_page)
   end
 
   # Return all tracks in the specified album, ordered by track number.
   def self.in_album artist_slug, album_slug
     where(:artist_slug => artist_slug, :album_slug => album_slug).order(:track_number)
   end
+
+  # The number of results to display at once.
+  def self.per_page
+    20
+  end
+
 end

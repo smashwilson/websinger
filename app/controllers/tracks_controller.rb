@@ -1,7 +1,12 @@
 class TracksController < ApplicationController
 
   def index
-    @tracks = Track.matching(params[:query]).paginate(:page => params[:page], :per_page => 20)
+    @show_sample = params[:query].blank?
+    @tracks = if @show_sample
+        Track.sample
+      else
+        Track.matching(params[:query]).paginate(:page => params[:page], :per_page => Track.per_page)
+      end
   end
 
   def autocomplete
