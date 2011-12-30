@@ -16,7 +16,7 @@ class PlaylistsController < ApplicationController
         enqueued.save
       end
     end
-    
+
     render :nothing => true
   end
 
@@ -26,11 +26,11 @@ class PlaylistsController < ApplicationController
     e = EnqueuedTrack.enqueue track
     
     unless e.valid?
-      render :status => 500, :text => "Unable to enqueue track: #{e.errors.full_messages.join ' '}"
+      render :status => 500, :text => "Unable to enqueue track: #{e.errors.full_messages.join ' '}", :content_type => 'text/plain'
       return
     end
 
-    render :text => "#{track} has been added to the playlist."
+    render :text => "#{track} has been added to the playlist.", :content_type => 'text/plain'
   end
   
   def enqueue_all
@@ -39,30 +39,30 @@ class PlaylistsController < ApplicationController
     
     unless es.all? { |e| e.valid? }
       summary = es.inject('') { |e,text| "#{text} #{e.errors.full_messages.join ' '}" }
-      render :status => 500, :text => "Unable to enqueue tracks: #{summary}"
+      render :status => 500, :text => "Unable to enqueue tracks: #{summary}", :content_type => 'text/plain'
     end
     
-    render :text => "#{tracks.size} tracks have been added to the playlist."
+    render :text => "#{tracks.size} tracks have been added to the playlist.", :content_type => 'text/plain'
   end
 
   # Remove an existing EnqueuedTrack by *queue* id.
   def dequeue
     e = EnqueuedTrack.find params[:id]
     if e.nil?
-      render :status => 404, :text => "Track (#{params[:id]}) not found"
+      render :status => 404, :text => "Track (#{params[:id]}) not found", :content_type => 'text/plain'
       return
     end
     
     e.delete
     
-    render :text => "#{e.track} has been removed from the playlist."
+    render :text => "#{e.track} has been removed from the playlist.", :content_type => 'text/plain'
   end
 
   # Clear the entire playlist.
   def clear
     EnqueuedTrack.delete_all
 
-    render :text => "Playlist cleared."
+    render :text => "Playlist cleared.", :content_type => 'text/plain'
   end
 
 end

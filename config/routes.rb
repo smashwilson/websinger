@@ -3,9 +3,9 @@ Websinger::Application.routes.draw do
   resource :player, :only => [:show, :update]
   
   resource :playlist, :only => [:show, :update] do
-    post 'enqueue' => 'playlists#enqueue', :as => 'enqueue'
+    post 'enqueue'
     post 'enqueue-all' => 'playlists#enqueue_all', :as => 'enqueue_all'
-    delete 'dequeue' => 'playlists#dequeue', :as => 'dequeue'
+    delete 'dequeue'
     delete :clear
   end
   
@@ -16,7 +16,9 @@ Websinger::Application.routes.draw do
 
     collection do
       get 'in-album/:artist_slug/:album_slug' => 'tracks#show_album', :as => 'album'
-      get 'autocomplete' => 'tracks#autocomplete', :as => 'autocomplete'
+      get 'autocomplete'
+      get 'results'
+      get 'sample'
     end
   end
   

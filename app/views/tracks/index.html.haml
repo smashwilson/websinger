@@ -2,20 +2,8 @@
 = form_tag(tracks_path, :method => 'get') do
   = text_field_tag :query, params[:query]
   = submit_tag 'search'
-.page-entries-info
-  - if @show_sample
-    = link_to 'refresh random sample', tracks_path
-  - else
-    = page_entries_info @tracks
-%ul.tracks
-  - @tracks.each do |track|
-    %li
-      = render :partial => 'track', :object => track
-      = link_to 'enqueue', enqueue_playlist_path(:id => track.id), :class => 'enqueue',
-        :id => track.id,
-        :method => 'POST', :remote => true
-- unless @show_sample
-  = will_paginate @tracks
+#tracklist
+  %p#loading loading results...
 - content_for :head do
   = stylesheet_link_tag 'browse.css'
   = javascript_include_tag tracks_path

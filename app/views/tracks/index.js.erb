@@ -1,11 +1,40 @@
+// Javascript to support the Websinger track-browsing view.
+
+// Temporarily replace the "enqueue" link text with "enqueueing..." while track
+// enqueueing is in progress.
+function showEnqueueing() {
+  this['previousText'] = $(this).html();
+  $(this).html('enqueueing...');
+  console.log('enqueue click handler invoked');
+}
+
+// Restore an "enqueue" link's original text after enqueueing has completed.
+function restoreOriginal() {
+  $(this).html(this['previousText'] || 'enqueue');
+  console.log('ajax:success click handler invoked');
+}
+
+// Load the current query's results into the tracklist area.
+function loadResults() {
+  console.log("Entering loadResults()");
+
+  var queryTerm = $('#query').html();
+  if (queryTerm === '') {
+    var searchUrl = '<%= url_for :action => "sample" %>';
+  } else {
+    var searchUrl = '<%= url_for :action => "results" %>';
+  }
+  $.get(searchUrl, { 'query': queryTerm }, function (data) {
+    $('#tracklist').html(data);
+  });
+  
+  // Re-register the handler to change 'enqueue' link to 'enqueueing...' while
+  // track enqueueing is in progress.
+  // $('.enqueue').click(showEnqueueing).bind('ajax:success', restoreOriginal);
+}
+
 $(function () {
 
-  // Change 'enqueue' link to 'enqueueing...' while the enqueueing is in progress.
-  $('.enqueue').click(function () {
-    this['previousText'] = $(this).html()
-    $(this).html('enqueueing...')
-  }).bind('ajax:success', function () {
-    $(this).html(this['previousText'] || 'enqueue')
-  })
-
+  // Start by loading results for the current search.
+  loadResults();
 })

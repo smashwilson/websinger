@@ -6,3 +6,7 @@ tmp/**/*
 
 # Only include SCSS templates.
 *.css
+
+# Asset pipeline
+.sass-cache/
+public/assets/
