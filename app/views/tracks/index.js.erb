@@ -5,35 +5,39 @@
 function showEnqueueing() {
   this['previousText'] = $(this).html();
   $(this).html('enqueueing...');
-  console.log('enqueue click handler invoked');
 }
 
 // Restore an "enqueue" link's original text after enqueueing has completed.
 function restoreOriginal() {
   $(this).html(this['previousText'] || 'enqueue');
-  console.log('ajax:success click handler invoked');
 }
 
-// Load the current query's results into the tracklist area.
+// Load the current query's results into the tracklist area. Throttle requests if
+// the users types too quickly.
 function loadResults() {
-  console.log("Entering loadResults()");
-
-  var queryTerm = $('#query').html();
-  if (queryTerm === '') {
-    var searchUrl = '<%= url_for :action => "sample" %>';
-  } else {
-    var searchUrl = '<%= url_for :action => "results" %>';
-  }
-  $.get(searchUrl, { 'query': queryTerm }, function (data) {
-    $('#tracklist').html(data);
-  });
-  
-  // Re-register the handler to change 'enqueue' link to 'enqueueing...' while
-  // track enqueueing is in progress.
-  // $('.enqueue').click(showEnqueueing).bind('ajax:success', restoreOriginal);
+  if (window.liveSearch) clearTimeout(window.liveSearch);
+  window.liveSearch = setTimeout(function() {
+    var queryTerm = $('#query').val();
+    if (queryTerm === '') {
+      var searchUrl = '<%= url_for :action => "sample" %>';
+    } else {
+      var searchUrl = '<%= url_for :action => "results" %>';
+    }
+    $.get(searchUrl, { 'query': queryTerm }, function (data) {
+      $('#tracklist').html(data);
+    });
+  }, 100);
 }
 
 $(function () {
+
+  // Register the "enqueue" link text toggle.
+  $(document)
+    .on('click', 'a.enqueue', showEnqueueing)
+    .on('ajax:success', 'a.enqueue', restoreOriginal);
+
+  // Register the live search handler.
+  $('#query').keyup(loadResults).mouseup(loadResults);
 
   // Start by loading results for the current search.
   loadResults();
