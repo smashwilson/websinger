@@ -1,3 +1,2 @@
-.page-entries-info= page_entries_info @tracks
+.page-entries-info= "Showing #{@tracks.size} matching tracks"
 = render :partial => 'tracklist', :object => @tracks
-= will_paginate @tracks

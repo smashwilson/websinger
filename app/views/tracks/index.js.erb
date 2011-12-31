@@ -25,8 +25,16 @@ function loadResults() {
     }
     $.get(searchUrl, { 'query': queryTerm }, function (data) {
       $('#tracklist').html(data);
+      window.lastLiveSearch = queryTerm;
     });
   }, 100);
+}
+
+// Resubmit the live search only if the query has changed since the last submission.
+function loadChangedResults() {
+  if (window.lastLiveSearch != $('#query').val()) {
+    loadResults();
+  }
 }
 
 $(function () {
@@ -37,7 +45,7 @@ $(function () {
     .on('ajax:success', 'a.enqueue', restoreOriginal);
 
   // Register the live search handler.
-  $('#query').keyup(loadResults).mouseup(loadResults);
+  $('#query').keyup(loadChangedResults).mouseup(loadChangedResults);
 
   // Start by loading results for the current search.
   loadResults();

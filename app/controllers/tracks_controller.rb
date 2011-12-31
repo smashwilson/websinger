@@ -4,7 +4,7 @@ class TracksController < ApplicationController
   end
 
   def results
-    @tracks = Track.matching(params[:query]).paginate(:page => params[:page], :per_page => Track.per_page)
+    @tracks = Track.matching(params[:query])
     render :layout => !request.xhr?
   end
 
