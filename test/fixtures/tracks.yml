@@ -1,19 +1,12 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  title: Song One
-  artist: Artist One
-  album: Album One
-  track_number: 1
-  disc_number: 1
+<% 1.upto(50) do |i| %>
+track_<%= i %>:
+  title: Song <%= i %>
+  artist: Artist <%= i % 5 %>
+  album: Album <%= i / 10 %>
+  track_number: <%= i % 10 %>
+  disc_number: <%= if i < 40 then 1 else i % 2 end %>
   length: 100
-  path: test/fixtures/song-one.mp3
-
-two:
-  title: MyString
-  artist: MyString
-  album: MyString
-  track_number: 1
-  disc_number: 1
-  length: 1
-  path: MyString
+  path: test/fixtures/song-<%= i %>.mp3
+<% end %>

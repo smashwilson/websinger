@@ -7,7 +7,7 @@ class Track < ActiveRecord::Base
   validates_presence_of :title
 
   has_many :enqueued_tracks
-  
+
   def to_s
     "#{artist} - #{title}"
   end
@@ -15,7 +15,7 @@ class Track < ActiveRecord::Base
   # Return the AlbumArt object associated with this track, if possible, or nil if none
   # can be found.
   def album_art
-    art = AlbumArt.from_directory(File.dirname path)
+    art = AlbumArt.from_directory(File.dirname(path))
     if art.nil?
       Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
     end
@@ -45,7 +45,9 @@ class Track < ActiveRecord::Base
       self.album_slug = self.album ? self.album.to_url : nil
 
       self.track_number = tag.tracknum
-      self.disc_number = tag.discnum
+
+      tag2 = mp3.tag2
+      self.disc_number = tag2['TPOS']
     end
   end
 
