@@ -20,19 +20,26 @@ function loadResults() {
     var queryTerm = $('#query').val();
     if (queryTerm === '') {
       var searchUrl = '<%= url_for :action => "sample" %>';
+    } else if (queryTerm.length < 3) {
+      return;
     } else {
       var searchUrl = '<%= url_for :action => "results" %>';
     }
-    $.get(searchUrl, { 'query': queryTerm }, function (data) {
-      $('#tracklist').html(data);
-      window.lastLiveSearch = queryTerm;
+    $.get(searchUrl, { 'query': queryTerm }, function (data, textStatus, xhr) {
+      // Only display the results of this query if the response corresponds to the text currently in the search box.
+      var currentQueryTerm = $('#query').val();
+      if (xhr.getResponseHeader('x-query') === currentQueryTerm) {
+        $('#tracklist').html(data);
+        window.lastLiveSearch = currentQueryTerm;
+      }
     });
   }, 100);
 }
 
 // Resubmit the live search only if the query has changed since the last submission.
 function loadChangedResults() {
-  if (window.lastLiveSearch != $('#query').val()) {
+  var queryTerm = $('#query').val();
+  if (window.lastLiveSearch != queryTerm) {
     loadResults();
   }
 }

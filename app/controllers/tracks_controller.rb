@@ -5,11 +5,13 @@ class TracksController < ApplicationController
 
   def results
     @tracks = Track.matching(params[:query])
+    response.headers['x-query'] = params[:query]
     render :layout => !request.xhr?
   end
 
   def sample
     @tracks = Track.sample
+    response.headers['x-query'] = ''
     render :layout => !request.xhr?
   end
 
