@@ -30,9 +30,12 @@ class Player
   # Open a pipe to the player executible and start the parsing loop. Only return once a shutdown command is processed.
   def main_loop
     @pipe = IO.popen("#{@player_path} -R -", 'w+')
+
+    # Record the player pid. Also, be sure that the player will be SIGTERM'd if we are.
+    File.open(@pid_path, 'w') { |f| f.puts @pipe.pid }
     Signal.trap('TERM') { Process.kill 'TERM', @pipe.pid }
 
-    # Load the first track
+    # Load the first track, or wait for the first track to be enqueued.
     advance
 
     # Cycle until a shutdown command is received.
@@ -54,15 +57,20 @@ class Player
       e = EnqueuedTrack.top
       process_command_queue
     end
-    load_track e.track unless @shutting_down
+    load_track(e.track) unless @shutting_down
   end
 
   # Player process controls.
 
-  def load_track t
+  def load_track t, state = :playing
     @status.track_id = t.id
-    @status.playback_state = :playing
-    execute "L #{t.path}"
+    @status.playback_state = state
+    @status.seconds = 0
+
+    command = state == :playing ? 'L' : 'LP'
+    execute "#{command} #{t.path}"
+
+    update_status
   end
 
   def play_action
@@ -79,17 +87,19 @@ class Player
   end
 
   # Jump to an absolute track position in seconds.
-  # FIXME ignore argument
   def jump_action seconds
     unless seconds =~ /[0-9]+/
       puts "! Invalid jump offset: #{seconds}"
       return
     end
-    execute "J #{seconds}s" if [:playing, :paused].include?(@status.playback_state)
+    if [:playing, :paused].include?(@status.playback_state)
+      execute "J #{seconds}s"
+      @status.seconds = seconds.to_f
+      update_status
+    end
   end
 
   # Set player volume as a percent, 0 to 100.
-  # FIXME doesn't work
   def volume_action percent
     unless percent =~ /100|[0-9]?[0-9]/
       puts "E Invalid volume: #{percent}"
@@ -106,7 +116,7 @@ class Player
   # Skip to the next enqueued track, if one is present. Do nothing if the queue is empty.
   def skip_action
     e = EnqueuedTrack.top
-    load_track e.track unless e.nil?
+    load_track(e.track, @status.playback_state) unless e.nil?
   end
 
   # Unload the track and stop the current player.
