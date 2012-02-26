@@ -7,3 +7,7 @@ tmp/**/*
 # Asset pipeline
 .sass-cache/
 public/assets/
+
+# Eclipse metadata
+.project
+.buildpath

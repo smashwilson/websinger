@@ -29,7 +29,7 @@ $headingheight: $heading - (2 * $headingpad);
   padding: $headingpad 5% ;
   background: #fff ;
   border-bottom: outset 2px gray ;
-  
+
   .panel {
     width: 30% ;
     text-align: center ;
@@ -47,7 +47,7 @@ $headingheight: $heading - (2 * $headingpad);
 .content {
   margin-top: $heading ;
   padding: 1em 5% 0 ;
-  
+
   h2 {
     color: #888 ;
     font-size: 200% ;
@@ -93,7 +93,7 @@ $headingheight: $heading - (2 * $headingpad);
   float: right ;
 
   .disable { display: none !important }
-  
+
   .error {
     position: absolute ;
     right: 7% ;
@@ -102,27 +102,27 @@ $headingheight: $heading - (2 * $headingpad);
     padding: 2px 5px ;
     background-color: lighten(red, 40%) ;
   }
-  
+
   .controls {
     font-size: 110% ;
     float: left ;
     width: 20% ;
     padding: 5px ;
-    
+
     #command_play {
       @include replace-image(image-url('button-play.png'), 50px, 50px);
     }
     .submitted#command_play {
       @include replace-image(image-url('button-play-submitted.png'), 50px, 50px);
     }
-    
+
     #command_pause {
       @include replace-image(image-url('button-pause.png'), 50px, 50px);
     }
     .submitted#command_pause {
       @include replace-image(image-url('button-pause-submitted.png'), 50px, 50px);
     }
-    
+
     #command_stop {
       @include replace-image(image-url('button-stop.png'), 50px, 50px);
     }
@@ -130,14 +130,14 @@ $headingheight: $heading - (2 * $headingpad);
       @include replace-image(image-url('button-stop-submitted.png'), 50px, 50px);
     }
   }
-  
+
   .track {
     font-size: 110% ;
     margin-left: 1em ;
     padding: 5px ;
     background: none ;
   }
-  
+
   .progress {
     clear: both ;
     position: relative ;
@@ -173,16 +173,16 @@ $headingheight: $heading - (2 * $headingpad);
   span.artist {
     margin-right: 4px ;
   }
-  
+
   span.title {
     font-weight: bold ;
     margin-right: 4px ;
   }
-  
+
   span.track-number {
     margin-right: 2px ;
   }
-  
+
   a.album {
     font-style: italic ;
     margin-right: 2px ;
