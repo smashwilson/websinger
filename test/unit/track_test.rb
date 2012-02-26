@@ -42,16 +42,21 @@ class TrackTest < ActiveSupport::TestCase
   end
 
   test 'retrieve a random sampling' do
-    1.upto(50) do |i|
-      Track.create!(:title => "Track #{i}")
-    end
-
     sample = Track.sample
     assert_equal Track.per_page, sample.size
   end
 
   test 'fetch by album' do
-    #
+    Track.all.each { |t| t.reslug && t.save! }
+
+    # A simple album
+    album0 = Track.in_album('artist-0', 'album-0')
+    assert_equal (1..9).to_a, album0.map(&:track_number)
+    assert_equal 'Song 1', album0[0].title
+
+    # An album with disc numbers. Even tracks are on disc 0, odd ones on disc 1.
+    album4 = Track.in_album('artist-2', 'album-4')
+    assert_equal [0, 2, 4, 6, 8, 1, 3, 5, 7, 9], album4.map(&:track_number)
   end
 
 end

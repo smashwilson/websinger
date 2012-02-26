@@ -1,9 +1,15 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
+# Tracks 1 through 50
+#  Artist: 1..19 => Artist 0, 20..39 => Artist 1, 40..50 => Artist 2
+#  Album: 1..9 => Album 0, 10..19 => Album 1, 20..29 => Album 2, ...
+#  Track number: 1 => 1, 2 => 2, ... , 10 => 0, 11 => 1, ...
+#  Disc number: 1..39 => 1, 40 => 0, 41 => 1, 42 => 0, ...
+
 <% 1.upto(50) do |i| %>
 track_<%= i %>:
   title: Song <%= i %>
-  artist: Artist <%= i % 5 %>
+  artist: Artist <%= i / 20 %>
   album: Album <%= i / 10 %>
   track_number: <%= i % 10 %>
   disc_number: <%= if i < 40 then 1 else i % 2 end %>

@@ -22,6 +22,12 @@ class Track < ActiveRecord::Base
     art
   end
 
+  # Regenerate the artist and album slugs.
+  def reslug
+    self.artist_slug = self.artist ? self.artist.to_url : nil
+    self.album_slug = self.album ? self.album.to_url : nil
+  end
+
   def update_from_path p
     self.path = p
     rencode = lambda do |original|
@@ -37,17 +43,14 @@ class Track < ActiveRecord::Base
 
       tag = mp3.tag
       self.title = rencode.call(tag.title)
-
       self.artist = rencode.call(tag.artist)
-      self.artist_slug = self.artist ? self.artist.to_url : nil
-
       self.album = rencode.call(tag.album)
-      self.album_slug = self.album ? self.album.to_url : nil
-
       self.track_number = tag.tracknum
 
       tag2 = mp3.tag2
       self.disc_number = tag2['TPOS']
+
+      reslug
     end
   end
 
@@ -63,7 +66,7 @@ class Track < ActiveRecord::Base
 
   # Return all tracks in the specified album, ordered by track number.
   def self.in_album artist_slug, album_slug
-    where(:artist_slug => artist_slug, :album_slug => album_slug).order(:track_number)
+    where(:artist_slug => artist_slug, :album_slug => album_slug).order(:disc_number, :track_number)
   end
 
   # The number of results to display at once.
