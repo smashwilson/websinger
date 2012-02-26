@@ -1,6 +1,7 @@
 # Requires an ActiveRecord environment.
 
 require 'io/wait'
+require 'logger'
 
 require 'mpg123player/common'
 require 'active_support/json'
@@ -15,7 +16,7 @@ class Player
   attr_accessor :status, :last_status
   attr_accessor :shutting_down
 
-  def initialize
+  def initialize poll_time = 1, log_level = Logger::INFO
     configure
     check_paths
 
@@ -23,12 +24,17 @@ class Player
     @status = Status.new
     @last_status = @status.dup
     @shutting_down = false
+
+    # Initialize the logger.
+    @logger = Logger.new(@log_path, 1, 1024 * 1024)
+    @logger.level = log_level
   end
 
   # Lifecycle events.
 
   # Open a pipe to the player executible and start the parsing loop. Only return once a shutdown command is processed.
   def main_loop
+    @logger.info 'Starting player.'
     @pipe = IO.popen("#{@player_path} -R -", 'w+')
 
     # Record the player pid. Also, be sure that the player will be SIGTERM'd if we are.
@@ -46,13 +52,16 @@ class Player
 
     # Kill the mpg123 process.
     Process.kill 'TERM', @pipe.pid
+
+    @logger.info 'Stopping player.'
+    @logger.close
   end
 
   # A track finished. Load the next enqueued track, waiting for one to be enqueued if the queue is empty.
   def advance
     e = EnqueuedTrack.top
     while e.nil? && !@shutting_down
-      puts "Waiting for track"
+      logger.debug 'Waiting for track'
       sleep @poll_time
       e = EnqueuedTrack.top
       process_command_queue
@@ -89,7 +98,7 @@ class Player
   # Jump to an absolute track position in seconds.
   def jump_action seconds
     unless seconds =~ /[0-9]+/
-      puts "! Invalid jump offset: #{seconds}"
+      @logger.error "Invalid jump offset: #{seconds}"
       return
     end
     if [:playing, :paused].include?(@status.playback_state)
@@ -102,7 +111,7 @@ class Player
   # Set player volume as a percent, 0 to 100.
   def volume_action percent
     unless percent =~ /100|[0-9]?[0-9]/
-      puts "E Invalid volume: #{percent}"
+      @logger.error "E Invalid volume: #{percent}"
       return
     end
     execute "V #{percent}"
@@ -111,6 +120,7 @@ class Player
   # Restart the current track.
   def restart_action
     execute "J 0"
+    update_status
   end
 
   # Skip to the next enqueued track, if one is present. Do nothing if the queue is empty.
@@ -131,7 +141,7 @@ class Player
   def check_paths
     [@status_path, @pid_path].each do |path|
       unless Dir.exist?(File.dirname(path)) && (! File.exist?(path) || File.writable?(path))
-        $stderr.puts <<MSG
+        @logger.fatal <<MSG
 Unable to create the file: <#{path}>
 
 Please ensure that the directory exists and that your filesystem permissions are set appropriately, or
@@ -145,6 +155,7 @@ MSG
   # Parse MPG123 remote interface output.
   # For documentation, see http://mpg123.org/cgi-bin/viewvc.cgi/tags/1.2.1/doc/README.remote
   def process_line line
+    @logger.debug line
 
     # EOF from pipe.
     return if line.nil?
@@ -165,7 +176,7 @@ MSG
         @status.send(setter, md[2].strip) if @status.send(getter).nil?
         update_status
       else
-        # puts "Ignoring tag: #{getter}"
+        @logger.debug "Ignoring tag: #{getter}"
       end
       return
     end
@@ -201,7 +212,7 @@ MSG
 
     # Error
     if md = /^@E (.+)/.match(line)
-      puts "! #{md[1]}"
+      @logger.error md[1]
       return
     end
 
@@ -213,7 +224,7 @@ MSG
     end
 
     # Unparsed!
-    puts "UNPARSED #{line}"
+    @logger.warn "UNPARSED #{line}"
   end
 
   # Handle all enqueued PlayerCommands.
@@ -225,12 +236,12 @@ MSG
 
   # Handle an incoming PlayerCommand.
   def process_command command
-    puts "Received command #{command.action}"
+    @logger.info "Received command #{command.action} #{command.parameter}"
     handler = method("#{command.action}_action")
     case handler.arity
     when 0 ; handler.call
     when 1 ; handler.call(command.parameter)
-    else ; puts "! Action method #{command.action}_action has arity of #{handler.arity}"
+    else ; @logger.error "Action method #{command.action}_action has arity of #{handler.arity}"
     end
   end
 
@@ -254,6 +265,7 @@ MSG
 
   # Send a command to the mpg123 pipe.
   def execute string
+    @logger.debug "> #{string}"
     @pipe.print "#{string}\n"
   end
 
