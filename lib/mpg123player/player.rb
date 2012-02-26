@@ -127,7 +127,7 @@ class Player
 
   protected
 
-  # Verify that the locations specified for the pid and status files exists and is writable.
+  # Verify that the locations specified for the pid and status files exist and are writable.
   def check_paths
     [@status_path, @pid_path].each do |path|
       unless Dir.exist?(File.dirname(path)) && (! File.exist?(path) || File.writable?(path))
