@@ -1,42 +1,34 @@
-require 'socket'
-
 require 'mpg123player/common'
 require 'active_support/json'
 
-module Mpg123Player
-
-class Client
+# Non-ActiveRecord model. Manage status and communications with the mpg123 player process.
+class Player
+  include Mpg123Player
   include Configurable
-  
+
   attr_reader :error
 
   def initialize
     configure
   end
-  
+
   # Controls
-  
+
   def play ; command 'play' ; end
   def pause ; command 'pause' ; end
+  def volume percent ; command 'volume', percent ; end
+  def restart ; command 'restart' ; end
+  def skip ; command 'skip' ; end
   def stop ; command 'stop' ; end
   def shutdown ; command 'shutdown' ; end
 
-  # Connect to the server, issue a command, and disconnect.
-  def command string
-    unless Commands.include? string
-      @error = "Invalid command: #{string}"
-      return
-    end
-    socket = TCPSocket.new('localhost', @server_port)
-  rescue e
-    @error = "Connection failed: #{e}"
-  else
-    socket.puts string
-    socket.close
+  # Issue a command to the server. Return the command object.
+  def command string, parameter = nil
+    PlayerCommand.create!(:action => string, :parameter => parameter)
   end
-  
+
   # Status
-  
+
   def ok?
     unless File.readable?(@pid_path)
       @error = "Can't read the pid file at #{@pid_path}!"
@@ -53,11 +45,11 @@ class Client
   else
     true
   end
-  
+
   def status
     @status ||= Status.from(JSON(status_json))
   end
-  
+
   def status_json
     if File.exist?(@status_path)
       File.open(@status_path) { |f| f.gets(nil) }
@@ -65,19 +57,17 @@ class Client
       Status.stopped.to_json
     end
   end
-  
+
   def playing?
     status.playback_state == 'playing'
   end
-  
+
   def paused?
     status.playback_state == 'paused'
   end
-  
+
   def stopped?
     status.playback_state == 'stopped'
   end
-
-end
 
 end
