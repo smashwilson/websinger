@@ -9,6 +9,7 @@ module Mpg123Player
 
 class Player
   include Configurable
+  include ActiveSupport::BufferedLogger::Severity
 
   attr_accessor :poll_time
   attr_accessor :status, :last_status
@@ -205,12 +206,14 @@ MSG
     puts "UNPARSED #{line}"
   end
 
-  # Handle all enqueued PlayerCommands
+  # Handle all enqueued PlayerCommands.
   def process_command_queue
-    PlayerCommand.flush_queue.each { |c| process_command c }
+    Rails.logger.silence(WARN) do
+      PlayerCommand.flush_queue.each { |c| process_command c }
+    end
   end
 
-  # Handle an incoming PlayerCommand
+  # Handle an incoming PlayerCommand.
   def process_command command
     puts "Received command #{command.action}"
     handler = method("#{command.action}_action")
