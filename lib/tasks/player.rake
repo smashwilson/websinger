@@ -5,33 +5,11 @@ namespace :websinger do
 
   desc 'The MP3 player daemon.  Should be managed by init.'
   task :player => :environment do
-    require 'mpg123player/server'
+    require 'mpg123player/player'
 
-    server = Mpg123Player::Server.new
-    POLL_TIME = 1 # seconds (may be fractional)
-
-    # Redirect stdout and stderr to log files.
-    $stdout = File.open(server.log_path, 'a')
-    $stderr = File.open(server.error_log_path, 'a')
-    
-    server.advance do
-      if server.stay_stopped
-        # Re-enqueue the previously playing track.
-        t = Track.find(server.last_track_id)
-        EnqueuedTrack.enqueue(t, :top)
-      end
-      e = nil
-      e = EnqueuedTrack.top unless server.stay_stopped
-      while e.nil? && ! server.shutting_down
-        e = EnqueuedTrack.top unless server.stay_stopped
-        sleep POLL_TIME
-      end
-      server.load_track e.track.path, e.track.id unless server.shutting_down
-    end
-    
-    puts 'Starting server...'
-    server.start
-    server.join
+    player = Mpg123Player::Player.new
+    puts 'Starting player...'
+    player.main_loop
     puts 'Shutting down...'
   end
 

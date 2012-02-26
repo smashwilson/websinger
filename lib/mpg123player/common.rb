@@ -1,6 +1,6 @@
 module Mpg123Player
 
-module Configuration  
+module Configuration
   class << self
     def player_path ; @player_path || '/usr/bin/mpg123' ; end
     def player_path= path ; @player_path = path ; end
