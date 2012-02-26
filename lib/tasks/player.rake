@@ -8,9 +8,7 @@ namespace :websinger do
     require 'mpg123player/player'
 
     player = Mpg123Player::Player.new
-    puts 'Starting player...'
     player.main_loop
-    puts 'Shutting down...'
   end
 
 end
