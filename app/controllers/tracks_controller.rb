@@ -11,7 +11,6 @@ class TracksController < ApplicationController
 
   def sample
     @tracks = Track.sample
-    response.headers['x-query'] = ''
     render :layout => !request.xhr?
   end
 

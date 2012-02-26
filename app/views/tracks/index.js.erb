@@ -28,7 +28,7 @@ function loadResults() {
     $.get(searchUrl, { 'query': queryTerm }, function (data, textStatus, xhr) {
       // Only display the results of this query if the response corresponds to the text currently in the search box.
       var currentQueryTerm = $('#query').val();
-      if (xhr.getResponseHeader('x-query') === currentQueryTerm) {
+      if ((xhr.getResponseHeader('x-query') || '') === currentQueryTerm) {
         $('#tracklist').html(data);
         window.lastLiveSearch = currentQueryTerm;
       }
