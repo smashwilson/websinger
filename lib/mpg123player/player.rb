@@ -61,7 +61,7 @@ class Player
   def advance
     e = EnqueuedTrack.top
     while e.nil? && !@shutting_down
-      logger.debug 'Waiting for track'
+      @logger.debug 'Waiting for track'
       sleep @poll_time
       e = EnqueuedTrack.top
       process_command_queue
