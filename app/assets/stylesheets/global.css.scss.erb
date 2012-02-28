@@ -103,49 +103,84 @@ $headingheight: $heading - (2 * $headingpad);
     background-color: lighten(red, 40%) ;
   }
 
-  .controls {
-    font-size: 110% ;
+  .album-art {
     float: left ;
-    width: 20% ;
-    padding: 5px ;
+    margin-right: 20px ;
+  }
+
+  .controls {
+    float: right ;
+    padding: 0 5px ;
+
+    $small-dim: 32px;
+    $large-dim: 48px;
+
+    #command_restart {
+      @include replace-image(image-url('button-restart.png'), $small-dim, $small-dim);
+    }
+    // .submitted#command_restart {
+    //   @include replace-image(image-url('button-restart-submitted.png'), $small-dim, $small-dim);
+    // }
 
     #command_play {
-      @include replace-image(image-url('button-play.png'), 50px, 50px);
+      @include replace-image(image-url('button-play.png'), $large-dim, $small-dim);
     }
-    .submitted#command_play {
-      @include replace-image(image-url('button-play-submitted.png'), 50px, 50px);
-    }
+    // .submitted#command_play {
+    //  @include replace-image(image-url('button-play-submitted.png'), $large-dim, $large-dim);
+    // }
 
     #command_pause {
-      @include replace-image(image-url('button-pause.png'), 50px, 50px);
+      @include replace-image(image-url('button-pause.png'), $large-dim, $small-dim);
     }
-    .submitted#command_pause {
-      @include replace-image(image-url('button-pause-submitted.png'), 50px, 50px);
-    }
+    // .submitted#command_pause {
+    //  @include replace-image(image-url('button-pause-submitted.png'), $large-dim, $large-dim);
+    // }
 
-    #command_stop {
-      @include replace-image(image-url('button-stop.png'), 50px, 50px);
+    #command_skip {
+      @include replace-image(image-url('button-skip.png'), $small-dim, $small-dim);
     }
-    .submitted#command_stop {
-      @include replace-image(image-url('button-stop-submitted.png'), 50px, 50px);
-    }
+    // .submitted#command_restart {
+    //  @include replace-image(image-url('button-skip-submitted.png'), $small-dim, $small-dim);
+    // }
   }
 
   .track {
-    font-size: 110% ;
-    margin-left: 1em ;
-    padding: 5px ;
+    margin-left: 100px ;
+    padding: 0 5px ;
     background: none ;
+
+    .title {
+      font-size: 125% ;
+      font-weight: bold ;
+    }
+    .artist {
+      padding-left: 10px ;
+      font-size: 110% ;
+    }
+    .album {
+      padding-left: 10px ;
+      font-style: italic ;
+      font-size: 110% ;
+    }
+  }
+
+  .progress-text {
+    float: right ;
+    clear: right ;
+    margin-top: 10px ;
+    padding: 0 5px ;
+    font-family: Corbel, serif ;
+    font-style: italic ;
+    color: #333 ;
   }
 
   .progress {
-    clear: both ;
     position: relative ;
-    font-weight: bold ;
-    text-align: center ;
-    background: white ;
-    margin: 5px ;
-    border: inset 2px gray ;
+    clear: right ;
+    margin-left: 90px ;
+    margin-top: 5px ;
+    border-top: solid 1px black ;
+    height: 5px ;
     .bar {
       position: absolute ;
       left: 0 ;
@@ -153,10 +188,6 @@ $headingheight: $heading - (2 * $headingpad);
       bottom: 0 ;
       background: #ddf ;
       z-index: 1 ;
-    }
-    span {
-      position: relative ;
-      z-index: 2 ;
     }
   }
 }

@@ -1,13 +1,18 @@
 .player
-  - if @player.error
-    %p.error= @player.error
+  = image_tag album_art_track_path(@status.track_id || -1), :class => 'album-art', :alt => 'Album art', :size => '90x90'
   %p.controls
+    = command_link 'restart'
     = command_link 'pause', @player.playing?
     = command_link 'play', ! @player.playing?
-    = command_link 'stop'
-  %p.track
-    %span.artist= @status.artist
-    %span.title= @status.title
+    = command_link 'skip'
+  .progress-text= @status.progress_s
+  .track
+    %p.title= @status.title
+    %p.artist= @status.artist
+    %p.album= @status.album
+  - if @player.error
+    %p.error= @player.error
   .progress
-    .bar{ :style => "width: #{@status.percent_complete}%" }
-    %span= @status.progress_s
+    -# .bar{ :style => "width: #{@status.percent_complete}%" } FIXME
+    .bar{ :style => "width: 30%" }
+  .volume
