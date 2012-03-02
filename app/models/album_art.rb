@@ -33,7 +33,7 @@ class AlbumArt
 
   FilenamePatterns = [
     'AlbumArt*.jpg','[Cc]over.jpg','[Cc]over.png',
-    '[Ff]older.jpg', 'Folder.png'
+    '[Ff]older.jpg', '[Ff]older.png'
   ]
 
   # Create a new instance based on the contents and inferred mime type of the file

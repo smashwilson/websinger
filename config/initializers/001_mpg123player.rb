@@ -30,9 +30,5 @@ require 'mpg123player/common'
 # Mpg123Player::Configuration.log_path = '/var/websinger/player.log'
 
 # Another log file that traps the $stderr output from the player.  Look here for ALSA errors and so on.
-# 
-# Mpg123Player::Configuration.error_log_path = '/var/websinger/errors.log'
-
-# The port that the player daemon should listen on to accept commands.
 #
-# Mpg123Player::Configuration.server_port = 12340
+# Mpg123Player::Configuration.error_log_path = '/var/websinger/errors.log'
