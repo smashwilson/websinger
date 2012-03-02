@@ -63,6 +63,44 @@ $(function() {
     refreshPlayer();
   })
 
+  // Moving the mouse over the progress bar causes the progress bar to track the X coordinate of the mouse pointer.
+  // Clicking the mouse on the progress bar executes a jump action with the percentage of the X coordinate as a
+  // command parameter.
+  function jumpTracker(event) {
+    var pixels = event.pageX - $(this).offset().left;
+    $('.player .progress .bar').css('width', pixels + 'px');
+  }
+
+  $('.progress').mouseenter(function () {
+    $(this).mousemove(jumpTracker);
+  });
+  $('.progress').mouseout(function () {
+    $(this).unbind('mousemove', jumpTracker);
+  });
+  $('.progress').click(function (event) {
+    var percent = Math.floor((event.pageX - $(this).offset().left) * 100 / $(this).width());
+    console.log('Jump = ' + percent + '%');
+  });
+
+  // Moving the mouse over the volume control causes the volume mask to track the Y coordinate of the mouse pointer.
+  // Clicking the mouse on the volume control sends a volume action with the percentage of the Y coordinate as a
+  // command parameter.
+  function volumeTracker(event) {
+    var pixels = event.pageY - $(this).offset().top;
+    $('.player .volume .mask').css('height', pixels + 'px');
+  }
+
+  $('.volume').mouseenter(function () {
+    $(this).mousemove(volumeTracker);
+  })
+  $('.volume').mouseout(function () {
+    $(this).unbind('mouseout', volumeTracker);
+  })
+  $('.volume').click(function (event) {
+    var percent = 100 - Math.floor((event.pageY - $(this).offset().top) * 100 / $(this).height());
+    console.log('Volume = ' + percent + '%');
+  })
+
   heartbeat(refreshPlayer);
 
   // Execute the heartbeat callback.

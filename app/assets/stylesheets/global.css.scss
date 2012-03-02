@@ -184,12 +184,12 @@ $headingheight: $heading - (2 * $headingpad);
       position: relative ;
       margin: 5px 15px 0 0 ;
       border-top: solid 1px black ;
-      height: 5px ;
+      height: 20px ;
       .bar {
         position: absolute ;
         left: 0 ;
         top: 0 ;
-        bottom: 0 ;
+        bottom: 15px ;
         background: #ddf ;
         z-index: 1 ;
       }
