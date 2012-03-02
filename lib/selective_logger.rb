@@ -13,7 +13,7 @@ class SelectiveLogger < Rails::Rack::Logger
   end
 
   def call env
-    if env['X-SILENCE-LOGGER'] || @opts[:silenced].include?(env['PATH_INFO'])
+    if env['X-SILENCE-LOGGER'] || (@opts[:silenced].include?(env['PATH_INFO']) && env['REQUEST_METHOD'] == 'GET')
       Rails.logger.silence(WARN) { @app.call(env) }
     else
       super(env)

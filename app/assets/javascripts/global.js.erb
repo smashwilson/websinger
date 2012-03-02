@@ -97,7 +97,11 @@ $(function() {
   });
   $('.progress').click(function (event) {
     var percent = Math.floor((event.pageX - $(this).offset().left) * 100 / $(this).width());
-    console.log('Jump = ' + percent + '%');
+    $.ajax({
+      url: '/player',
+      type: 'PUT',
+      data: { 'command': 'jump', 'parameter': percent }
+    });
   });
 
   // Moving the mouse over the volume control causes the volume mask to track the Y coordinate of the mouse pointer.
@@ -121,7 +125,11 @@ $(function() {
   })
   $('.volume').click(function (event) {
     var percent = 100 - Math.floor((event.pageY - $(this).offset().top) * 100 / $(this).height());
-    console.log('Volume = ' + percent + '%');
+    $.ajax({
+      url: '/player',
+      type: 'PUT',
+      data: { 'command': 'volume', 'parameter': percent }
+    });
   })
 
   heartbeat(refreshPlayer);

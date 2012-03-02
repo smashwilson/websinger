@@ -5,7 +5,7 @@ class PlayersController < ApplicationController
   end
 
   def update
-    @player.command(params[:command])
+    @player.command(params[:command], params[:parameter])
     if @player.error
       render :status => 500, :text => @player.error, :content_type => 'text/plain'
     else
