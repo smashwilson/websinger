@@ -33,8 +33,12 @@ class TracksController < ApplicationController
   end
 
   def album_art
-    @track = Track.find(params[:id])
-    art = @track.album_art
+    if params[:id] == 'placeholder'
+      art = AlbumArt.default
+    else
+      @track = Track.find(params[:id])
+      art = @track.album_art
+    end
 
     response.headers['x-placeholder-art'] = 'true' if art.default?
     if art && art.ok?

@@ -23,4 +23,11 @@ class TracksControllerTest < ActionController::TestCase
     assert_equal 'true', @response.header['x-placeholder-art']
   end
 
+  test "explicit request for placeholder album art" do
+    get :album_art, { :id => 'placeholder' }
+    assert_response :success
+    assert_equal 'image/png', @response.header['Content-Type']
+    assert_equal 'true', @response.header['x-placeholder-art']
+  end
+
 end
