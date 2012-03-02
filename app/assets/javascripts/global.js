@@ -58,15 +58,11 @@ $(function() {
       if (updateProgress) {
         $('.player .progress .bar').css('width', status.percent_complete + '%');
         $('.player .control-cluster .progress-text').html(status.progress);
-      } else {
-        console.log('Ignoring progress update');
       }
 
       // Update the volume control.
       if (updateVolume) {
         $('.player .volume .mask').css('height', (100 - status.volume) + '%');
-      } else {
-        console.log('Ignoring volume update');
       }
     })
   }
