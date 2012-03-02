@@ -39,7 +39,6 @@ $(function() {
 
   function refreshPlayer() {
     $.getJSON('/player', function (status) {
-      lastStatus = status;
       $('.player .controls a').removeClass('submitted');
 
       if( status.playback_state != 'playing' ) {
@@ -50,9 +49,14 @@ $(function() {
         $('#command_pause').removeClass('disable');
       }
 
-      $('.player .track .title').html(status.title);
-      $('.player .track .artist').html(status.artist);
-      $('.player .track .album').html(status.album);
+      // Update track data.
+      if (lastStatus == null || status.track_id != lastStatus.track_id) {
+        var albumArtId = status.track_id || 'placeholder';
+        $('.player .album-art').attr('src', '/tracks/' + albumArtId + '/album-art');
+        $('.player .track .title').html(status.title || ' ');
+        $('.player .track .artist').html(status.artist || ' ');
+        $('.player .track .album').html(status.album || ' ');
+      }
 
       // Update the progress bar.
       if (updateProgress) {
@@ -64,6 +68,8 @@ $(function() {
       if (updateVolume) {
         $('.player .volume .mask').css('height', (100 - status.volume) + '%');
       }
+
+      lastStatus = status;
     })
   }
 
