@@ -26,7 +26,7 @@ $headingheight: $heading - (2 * $headingpad);
   left: 0 ;
   right: 0 ;
   height: $headingheight ;
-  padding: $headingpad 5% ;
+  padding: $headingpad 0 $headingpad 5% ;
   background: #fff ;
   border-bottom: outset 2px gray ;
 
@@ -110,8 +110,8 @@ $headingheight: $heading - (2 * $headingpad);
   }
 
   $player-height: 92px ;
-  $album-width: 92px;
-  $volume-width: 12px;
+  $album-width: 92px ;
+  $volume-width: 10% ;
 
   .central {
     margin: 0 $volume-width 0 $album-width ;
@@ -181,15 +181,16 @@ $headingheight: $heading - (2 * $headingpad);
     }
 
     .progress {
+      cursor: pointer ;
       position: relative ;
       margin: 5px 15px 0 0 ;
       border-top: solid 1px black ;
-      height: 20px ;
+      height: 30px ;
       .bar {
         position: absolute ;
         left: 0 ;
         top: 0 ;
-        bottom: 15px ;
+        bottom: 25px ;
         background: #ddf ;
         z-index: 1 ;
       }
@@ -197,12 +198,13 @@ $headingheight: $heading - (2 * $headingpad);
   } // .central
 
   .volume {
+    cursor: pointer ;
     position: relative ;
     float: right ;
     width: $volume-width ;
     height: $player-height ;
     border-left: solid 1px black ;
-    background-image: image-url('volume.png') ;
+    background: image-url('volume.png') no-repeat ;
 
     .mask {
       position: absolute ;

@@ -32,9 +32,14 @@ $(function() {
   $('#success').click(fadeCallback);
   $('#failure').click(fadeCallback);
 
-  // Update the player state.
+  // Track and update the player state.
+  var lastStatus = null;
+  var updateProgress = true;
+  var updateVolume = true;
+
   function refreshPlayer() {
     $.getJSON('/player', function (status) {
+      lastStatus = status;
       $('.player .controls a').removeClass('submitted');
 
       if( status.playback_state != 'playing' ) {
@@ -49,12 +54,20 @@ $(function() {
       $('.player .track .artist').html(status.artist);
       $('.player .track .album').html(status.album);
 
-      // Update the progress bar
-      $('.player .progress .bar').css('width', status.percent_complete + '%');
-      $('.player .control-cluster .progress-text').html(status.progress);
+      // Update the progress bar.
+      if (updateProgress) {
+        $('.player .progress .bar').css('width', status.percent_complete + '%');
+        $('.player .control-cluster .progress-text').html(status.progress);
+      } else {
+        console.log('Ignoring progress update');
+      }
 
-      // Update the volume control
-      $('.player .volume .mask').css('height', (100 - status.volume) + '%');
+      // Update the volume control.
+      if (updateVolume) {
+        $('.player .volume .mask').css('height', (100 - status.volume) + '%');
+      } else {
+        console.log('Ignoring volume update');
+      }
     })
   }
 
@@ -72,10 +85,15 @@ $(function() {
   }
 
   $('.progress').mouseenter(function () {
+    updateProgress = false;
     $(this).mousemove(jumpTracker);
   });
   $('.progress').mouseout(function () {
     $(this).unbind('mousemove', jumpTracker);
+    if (lastStatus != null) {
+      $('.player .progress .bar').css('width', lastStatus.percent_complete + '%')
+    }
+    updateProgress = true;
   });
   $('.progress').click(function (event) {
     var percent = Math.floor((event.pageX - $(this).offset().left) * 100 / $(this).width());
@@ -91,10 +109,15 @@ $(function() {
   }
 
   $('.volume').mouseenter(function () {
+    updateVolume = false;
     $(this).mousemove(volumeTracker);
   })
   $('.volume').mouseout(function () {
     $(this).unbind('mouseout', volumeTracker);
+    if (lastStatus != null) {
+      $('.player .volume .mask').css('height', (100 - lastStatus.volume) + '%');
+    }
+    updateVolume = true;
   })
   $('.volume').click(function (event) {
     var percent = 100 - Math.floor((event.pageY - $(this).offset().top) * 100 / $(this).height());
