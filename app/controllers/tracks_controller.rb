@@ -36,12 +36,11 @@ class TracksController < ApplicationController
     @track = Track.find(params[:id])
     art = @track.album_art
 
-    # TODO use a default album image
-
+    response.headers['x-placeholder-art'] = 'true' if art.default?
     if art && art.ok?
       send_data art.image, :type => art.mime_type, :disposition => 'inline'
     else
-      render :text => 'Missing album art', :status => 404, :content_type => 'text/plain'
+      render :text => 'Album art corrupted', :status => 500, :content_type => 'text/plain'
     end
   end
 

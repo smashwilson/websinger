@@ -9,7 +9,9 @@ class ApplicationController < ActionController::Base
     @player.ok?
 
     @status = @player.status
-    @status.track = Track.find(@status.track_id) if @status.track_id
+    if @status.track_id
+      @status.track = Track.where(:id => @status.track_id).first
+    end
   end
 
 end

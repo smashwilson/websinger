@@ -10,4 +10,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  def music_path *parts
+    Rails.root.join('test', 'fixtures', 'music', *parts).to_s
+  end
 end

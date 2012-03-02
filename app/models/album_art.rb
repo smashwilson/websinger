@@ -23,7 +23,7 @@ class AlbumArt
 
   # Return true if the image is non-empty and a mime type was successfully inferred.
   def ok?
-    @image && @mime_type
+    !@image.nil? && !@mime_type.nil?
   end
 
   # Return true if this is the "placeholder" image for albums without album art.

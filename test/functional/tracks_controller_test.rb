@@ -1,14 +1,26 @@
 require 'test_helper'
 
 class TracksControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
+
+  test "should access album art" do
+    t = Track.new
+    t.update_from_path(music_path 'track-with-album-art', 'folder-album-art.mp3')
+    t.save!
+
+    get :album_art, { :id => t.id }
     assert_response :success
+    assert_equal 'image/png', @response.header['Content-Type']
   end
 
-  test "should get show_album" do
-    get :show_album
+  test "should provide placeholder album art" do
+    t = Track.new
+    t.update_from_path(music_path 'full-tags.mp3')
+    t.save!
+
+    get :album_art, { :id => t.id }
     assert_response :success
+    assert_equal 'image/png', @response.header['Content-Type']
+    assert_equal 'true', @response.header['x-placeholder-art']
   end
 
 end

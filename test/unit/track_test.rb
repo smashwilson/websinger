@@ -17,9 +17,10 @@ class TrackTest < ActiveSupport::TestCase
 
   test 'read mp3 info from track' do
     t = Track.new
-    t.update_from_path 'test/fixtures/music/full-tags.mp3'
+    # t.update_from_path 'test/fixtures/music/full-tags.mp3'
+    t.update_from_path(music_path 'full-tags.mp3')
 
-    assert_equal 'test/fixtures/music/full-tags.mp3', t.path
+    assert_equal music_path('full-tags.mp3'), t.path
     assert_equal 'track title', t.title
     assert_equal 'artist', t.artist
     assert_equal 'artist', t.artist_slug
@@ -61,7 +62,7 @@ class TrackTest < ActiveSupport::TestCase
 
   test 'find album art in same folder' do
     t = Track.new
-    t.update_from_path 'test/fixtures/music/track-with-album-art/folder-album-art.mp3'
+    t.update_from_path music_path('track-with-album-art', 'folder-album-art.mp3')
     a = t.album_art
 
     assert_not_nil a
@@ -72,7 +73,7 @@ class TrackTest < ActiveSupport::TestCase
 
   test 'default to placeholder art' do
     t = Track.new
-    t.update_from_path 'test/fixtures/music/full-tags.mp3'
+    t.update_from_path music_path('full-tags.mp3')
     a = t.album_art
 
     assert_not_nil a

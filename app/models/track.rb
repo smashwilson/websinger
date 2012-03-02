@@ -16,10 +16,10 @@ class Track < ActiveRecord::Base
   # can be found.
   def album_art
     art = AlbumArt.from_directory(File.dirname(path))
-    if art.nil?
+    if art.nil? || !art.ok?
       Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
     end
-    if art.nil?
+    if art.nil? || !art.ok?
       art = AlbumArt.default
     end
     art
