@@ -59,4 +59,25 @@ class TrackTest < ActiveSupport::TestCase
     assert_equal [0, 2, 4, 6, 8, 1, 3, 5, 7, 9], album4.map(&:track_number)
   end
 
+  test 'find album art in same folder' do
+    t = Track.new
+    t.update_from_path 'test/fixtures/music/track-with-album-art/folder-album-art.mp3'
+    a = t.album_art
+
+    assert_not_nil a
+    assert a.ok?
+    assert !a.default?
+    assert_equal 'image/png', a.mime_type
+  end
+
+  test 'default to placeholder art' do
+    t = Track.new
+    t.update_from_path 'test/fixtures/music/full-tags.mp3'
+    a = t.album_art
+
+    assert_not_nil a
+    assert a.ok?
+    assert a.default?
+    assert_equal 'image/png', a.mime_type
+  end
 end

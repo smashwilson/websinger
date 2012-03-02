@@ -4,7 +4,7 @@
   \//
   %span.album= @track.album
 .album-info
-  = image_tag album_art_track_path(@track.id), :alt => 'Album art', :size => '300x296'
+  = image_tag album_art_track_path(@track.id), :alt => 'Album art', :size => '300x300'
   = link_to 'enqueue all', enqueue_all_playlist_path(:ids => @track_ids),
       :class => 'enqueue', :method => 'POST', :remote => true
 %ul.tracks

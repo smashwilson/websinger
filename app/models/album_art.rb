@@ -4,8 +4,9 @@
 class AlbumArt
   attr_accessor :image, :mime_type
 
-  def initialize image
+  def initialize image, default = false
     @image = image
+    @default = default
 
     # Infer the image mimetype by looking for magic numbers within the image data. For references:
     # http://en.wikipedia.org/wiki/Magic_number_(programming)
@@ -25,6 +26,11 @@ class AlbumArt
     @image && @mime_type
   end
 
+  # Return true if this is the "placeholder" image for albums without album art.
+  def default?
+    @default
+  end
+
   FilenamePatterns = [
     'AlbumArt*.jpg','[Cc]over.jpg','[Cc]over.png',
     '[Ff]older.jpg', 'Folder.png'
@@ -32,8 +38,8 @@ class AlbumArt
 
   # Create a new instance based on the contents and inferred mime type of the file
   # at +path+.
-  def self.from_file path
-    new(File.open(path, 'rb:BINARY') { |f| f.read nil })
+  def self.from_file path, default = false
+    new(File.open(path, 'rb:BINARY') { |f| f.read nil }, default)
   end
 
   # Create a new instance from album art embedded in the mp3 metadata of a track.
@@ -56,5 +62,9 @@ class AlbumArt
       end
     end
     nil
+  end
+
+  def self.default
+    @default ||= from_file(Rails.root.join('app', 'assets', 'images', 'missing-album.png'), true)
   end
 end

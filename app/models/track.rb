@@ -19,6 +19,9 @@ class Track < ActiveRecord::Base
     if art.nil?
       Mp3Info.open(path) { |mp3| art = AlbumArt.from_metadata(mp3) }
     end
+    if art.nil?
+      art = AlbumArt.default
+    end
     art
   end
 
