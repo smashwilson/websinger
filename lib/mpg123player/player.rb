@@ -61,7 +61,7 @@ class Player
   def advance
     e = EnqueuedTrack.top
     while e.nil? && !@shutting_down
-      logger.debug 'Waiting for track'
+      @logger.debug 'Waiting for track'
       sleep @poll_time
       e = EnqueuedTrack.top
       process_command_queue
@@ -248,11 +248,13 @@ MSG
   # Invoke the appropriate callbacks depending on the current and previous player states.
   def transition_to_state playback_state
     former = @status.playback_state
+    @logger.info "Transitioning from state #{former} to #{playback_state}"
     if former != playback_state
       @status.playback_state = playback_state
       @status.clear if playback_state == :stopped
       update_status
     end
+    advance if playback_state == :stopped
   end
 
   # Serialize the Status object to disk as JSON if it has changed significantly.
