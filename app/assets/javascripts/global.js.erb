@@ -35,9 +35,6 @@ $(function() {
   // Update the player state.
   function refreshPlayer() {
     $.getJSON('/player', function (status) {
-      var percent = 0;
-      var timeString = '';
-
       $('.player .controls a').removeClass('submitted');
 
       if( status.playback_state != 'playing' ) {
@@ -48,10 +45,16 @@ $(function() {
         $('#command_pause').removeClass('disable');
       }
 
-      $('.player .track .artist').html(status.artist);
       $('.player .track .title').html(status.title);
+      $('.player .track .artist').html(status.artist);
+      $('.player .track .album').html(status.album);
+
+      // Update the progress bar
       $('.player .progress .bar').css('width', status.percent_complete + '%');
-      $('.player .progress span').html(status.progress);
+      $('.player .control-cluster .progress-text').html(status.progress);
+
+      // Update the volume control
+      $('.player .volume .mask').css('height', (100 - status.volume) + '%');
     })
   }
 
