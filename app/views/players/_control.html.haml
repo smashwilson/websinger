@@ -1,13 +1,13 @@
 .player
   = image_tag image_path('empty-album.png'), :class => 'album-art', :alt => 'Album art', :size => '90x90'
   .volume
-    .mask{ :style => "height: 100%" }
+    .mask{ :style => "height: 0%" }
   %p.error
   .central
     .control-cluster
       %p.controls
         = command_link 'restart'
-        = command_link 'pause'
+        = command_link 'pause', false
         = command_link 'play'
         = command_link 'skip'
       %p.progress-text

@@ -18,7 +18,7 @@ module Configurable
     @pid_path = Configuration.pid_path || @base_path.join('pids', 'player.pid')
     @log_path = Configuration.log_path || Rails.root.join('log', 'player.log')
     @error_log_path = Configuration.error_log_path || Rails.root.join('log', 'player.err.log')
-    @command_poll = (Configuration.command_poll_time || 0.1).to_f
+    @command_poll = (Configuration.command_poll || 0.1).to_f
     @command_timeout = (Configuration.command_timeout || 5).to_f
   end
 end
