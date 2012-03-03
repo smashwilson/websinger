@@ -163,6 +163,8 @@ $headingheight: $heading - (2 * $headingpad);
     }
 
     .track {
+      height: 70px ;
+      margin: 0 ;
       background: none ;
 
       .title {
@@ -183,7 +185,7 @@ $headingheight: $heading - (2 * $headingpad);
     .progress {
       cursor: pointer ;
       position: relative ;
-      margin: 5px 15px 0 0 ;
+      margin-right: 15px ;
       border-top: solid 1px black ;
       height: 30px ;
       .bar {

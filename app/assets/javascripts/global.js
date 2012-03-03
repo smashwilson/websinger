@@ -90,7 +90,7 @@ $(function() {
     updateProgress = false;
     $(this).mousemove(jumpTracker);
   });
-  $('.progress').mouseout(function () {
+  $('.progress').mouseleave(function () {
     $(this).unbind('mousemove', jumpTracker);
     if (lastStatus != null) {
       $('.player .progress .bar').css('width', lastStatus.percent_complete + '%')
@@ -118,8 +118,8 @@ $(function() {
     updateVolume = false;
     $(this).mousemove(volumeTracker);
   })
-  $('.volume').mouseout(function () {
-    $(this).unbind('mouseout', volumeTracker);
+  $('.volume').mouseleave(function () {
+    $(this).unbind('mousemove', volumeTracker);
     if (lastStatus != null) {
       $('.player .volume .mask').css('height', (100 - lastStatus.volume) + '%');
     }
