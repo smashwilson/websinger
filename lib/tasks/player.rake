@@ -5,10 +5,10 @@ namespace :websinger do
 
   desc 'The MP3 player daemon.  Should be managed by init.'
   task :player => :environment do
-    require 'mpg123player/player'
+    require 'mpg123player/server'
 
-    player = Mpg123Player::Player.new
-    player.main_loop
+    server = Mpg123Player::Server.new
+    server.main_loop
   end
 
 end

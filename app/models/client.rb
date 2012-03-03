@@ -2,7 +2,7 @@ require 'mpg123player/common'
 require 'active_support/json'
 
 # Non-ActiveRecord model. Manage status and communications with the mpg123 player process.
-class Player
+class Client
   include Mpg123Player
   include Configurable
 

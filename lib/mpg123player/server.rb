@@ -8,7 +8,7 @@ require 'active_support/json'
 
 module Mpg123Player
 
-class Player
+class Server
   include Configurable
   include ActiveSupport::BufferedLogger::Severity
 

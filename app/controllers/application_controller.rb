@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   private
 
   def create_player_client
-    @player = Player.new
+    @player = Client.new
     @player.ok?
 
     @status = @player.status
