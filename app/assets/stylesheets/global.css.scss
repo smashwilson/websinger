@@ -95,6 +95,7 @@ $headingheight: $heading - (2 * $headingpad);
   .disable { display: none !important }
 
   .error {
+    display: none ;
     position: absolute ;
     top: 5% ;
     right: 7% ;
