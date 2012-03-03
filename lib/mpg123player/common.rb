@@ -2,26 +2,9 @@ module Mpg123Player
 
 module Configuration
   class << self
-    def player_path ; @player_path || '/usr/bin/mpg123' ; end
-    def player_path= path ; @player_path = path ; end
-
-    def base_path ; @base_path || '/var/websinger' ; end
-    def base_path= path ; @base_path = path ; end
-
-    def pid_path ; @pid_path || "#{base_path}/player.pid" ; end
-    def status_path ; @status_path || "#{base_path}/status.yaml" ; end
-    def log_path ; @log_path || "#{base_path}/player.log" ; end
-    def error_log_path ; @error_log_path || "#{base_path}/errors.log" ; end
-    def server_port ; @server_port || 12340 ; end
-
-    def pid_path= path ; @pid_path = path ; end
-    def status_path= path ; @status_path = path ; end
-    def log_path= path ; @log_path = path ; end
-    def error_log_path= path ; @error_log_path = path ; end
-    def server_port= port ; @server_port = port ; end
-
-    def user ; @username || 'websinger' ; end
-    def user= name ; @username = name ; end
+    attr_accessor :player_path
+    attr_accessor :base_path, :pid_path, :status_path, :log_path, :error_log_path
+    attr_accessor :user
   end
 end
 
@@ -29,12 +12,12 @@ module Configurable
   attr_accessor :log_path, :error_log_path
 
   def configure
-    @player_path = Configuration.player_path
-    @status_path = Configuration.status_path
-    @pid_path = Configuration.pid_path
-    @log_path = Configuration.log_path
-    @error_log_path = Configuration.error_log_path
-    @server_port = Configuration.server_port
+    @player_path = Configuration.player_path || '/usr/bin/mpg123'
+    @base_path = Configuration.base_path || Rails.root.join('tmp')
+    @status_path = Configuration.status_path || @base_path.join('status.yaml')
+    @pid_path = Configuration.pid_path || @base_path.join('pids', 'player.pid')
+    @log_path = Configuration.log_path || Rails.root.join('log', 'player.log')
+    @error_log_path = Configuration.error_log_path || Rails.root.join('log', 'player.err.log')
   end
 end
 

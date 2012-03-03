@@ -18,16 +18,17 @@ class Server
 
   def initialize poll_time = 1, log_level = Logger::INFO
     configure
+
+    # Initialize the logger.
+    @logger = Logger.new(@log_path, 1, 1024 * 1024)
+    @logger.level = log_level
+
     check_paths
 
     @poll_time = 1 # Seconds, may be fractional
     @status = Status.new
     @last_status = @status.dup
     @shutting_down = false
-
-    # Initialize the logger.
-    @logger = Logger.new(@log_path, 1, 1024 * 1024)
-    @logger.level = log_level
   end
 
   # Lifecycle events.
