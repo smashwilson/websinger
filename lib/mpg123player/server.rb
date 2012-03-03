@@ -26,14 +26,14 @@ class Server
     check_paths
 
     @poll_time = 1 # Seconds, may be fractional
-    @status = Status.new
+    @status = Status.stopped
     @last_status = @status.dup
     @shutting_down = false
   end
 
   # Lifecycle events.
 
-  # Open a pipe to the player executible and start the parsing loop. Only return once a shutdown command is processed.
+  # Open a pipe to the player executable and start the parsing loop. Only return once a shutdown command is processed.
   def main_loop
     @logger.info 'Starting player.'
     @pipe = IO.popen("#{@player_path} -R -", 'w+')
@@ -73,9 +73,8 @@ class Server
   # Player process controls.
 
   def load_track t, state = :playing
-    @status.track_id = t.id
+    @status.on_track t
     @status.playback_state = state
-    @status.seconds = 0
 
     command = state == :playing ? 'L' : 'LP'
     execute "#{command} #{t.path}"
@@ -91,12 +90,7 @@ class Server
     execute 'P' if @status.playback_state != :paused
   end
 
-  # TODO remove when player controls are reorganized.
-  def stop_action
-    execute 'S' if @status.playback_state != :stopped
-  end
-
-  # Jump to an absolute track position in seconds.
+  # Jump to an absolute track position, specified in seconds.
   def jump_action seconds
     unless seconds =~ /[0-9]+/
       @logger.error "Invalid jump offset: #{seconds}"
@@ -124,10 +118,14 @@ class Server
     update_status
   end
 
-  # Skip to the next enqueued track, if one is present. Do nothing if the queue is empty.
+  # Skip to the next enqueued track, if one is present. Stop playback if the queue is empty.
   def skip_action
     e = EnqueuedTrack.top
-    load_track(e.track, @status.playback_state) unless e.nil?
+    if e.nil?
+      execute 'S'
+    else
+      load_track(e.track, @status.playback_state)
+    end
   end
 
   # Unload the track and stop the current player.
@@ -170,54 +168,29 @@ MSG
     # Jump feedback.
     return if line =~ /^@J/
 
-    # ID3v2 metadata tags
-    if md = /^@I ID3v2.([^:]+):(.+)/.match(line)
-      getter, setter = md[1], "#{md[1]}="
-      if @status.respond_to?(setter) && @status.respond_to?(getter)
-        @status.send(setter, md[2].strip) if @status.send(getter).nil?
-        update_status
-      else
-        @logger.debug "Ignoring tag: #{getter}"
-      end
-      return
-    end
+    # ID3v2 metadata tags. We pull track data from ActiveRecord instead.
+    return if line =~ /^@I/
 
-    # ID3 tag
-    if md = /^@I ID3:(.{30})(.{30})(.{30})/.match(line)
-      @status.title = md[1].strip
-      @status.artist = md[2].strip
-      @status.album = md[3].strip
-      update_status
-      return
-    end
-
-    # In the absense of parseable ID3 data just grab whatever
-    if md = /^@I (.+)/.match(line)
-      @status.title ||= md[1]
-      update_status
-      return
-    end
-
-    # Frame info (during playback)
+    # Frame info (during playback).
     if md = /^@F [0-9-]+ [0-9-]+ ([0-9.-]+) ([0-9.-]+)/.match(line)
       @status.seconds = md[1].to_f
       update_status
       return
     end
 
-    # Playing status changed
+    # Playing status changed.
     if md = /^@P (\d+)/.match(line)
       transition_to_state([:stopped, :paused, :playing][md[1].to_i])
       return
     end
 
-    # Error
+    # Error.
     if md = /^@E (.+)/.match(line)
       @logger.error md[1]
       return
     end
 
-    # Volume
+    # Volume change.
     if md = /^@V (\d+)/.match(line)
       @status.volume = md[1].to_i
       update_status
