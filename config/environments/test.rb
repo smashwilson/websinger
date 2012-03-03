@@ -36,4 +36,7 @@ Websinger::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Use the testing client (which requires explicit driving methods).
+  Mpg123Player::Configuration.client_class = TestClient
 end

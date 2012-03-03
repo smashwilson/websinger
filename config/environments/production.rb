@@ -57,4 +57,7 @@ Websinger::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Use the production client.
+  Mpg123Player::Configuration.client_class = ProductionClient
 end

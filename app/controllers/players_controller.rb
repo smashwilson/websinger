@@ -1,3 +1,5 @@
+require 'mpg123player/common'
+
 class PlayersController < ApplicationController
   before_filter :create_player_client
 
@@ -17,7 +19,7 @@ class PlayersController < ApplicationController
   private
 
   def create_player_client
-    @player = Client.new
+    @player = Mpg123Player::Configuration.client_class.new
     @player.ok?
 
     @status = @player.status

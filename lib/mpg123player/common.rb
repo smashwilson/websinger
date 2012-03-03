@@ -5,6 +5,8 @@ module Configuration
     attr_accessor :player_path, :user
     attr_accessor :base_path, :pid_path, :status_path, :log_path, :error_log_path
     attr_accessor :command_poll, :command_timeout
+
+    attr_accessor :client_class
   end
 end
 

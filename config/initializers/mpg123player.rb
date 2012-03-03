@@ -14,21 +14,21 @@ require 'mpg123player/common'
 
 # The home directory for the player daemon's user.  Must be owned by the daemon user.
 #
-# Mpg123Player::Configuration.base_path = '/var/websinger'
+# Mpg123Player::Configuration.base_path = Rails.root.join('tmp')
 
 # A path used to communicate the status of the player daemon's process.
 #
-# Mpg123Player::Configuration.pid_path = '/var/websinger/player.pid'
+# Mpg123Player::Configuration.pid_path = Rails.root.join('tmp', 'pids', 'player.pid')
 
 # This file will be written periodically by the player daemon with a data structure containing information about the
 # current track.
 #
-# Mpg123Player::Configuration.status_path = '/var/websinger/status.yaml'
+# Mpg123Player::Configuration.status_path = Rails.root.join('tmp', 'status.yaml')
 
 # A log file containing output from the player daemon.
 #
-# Mpg123Player::Configuration.log_path = '/var/websinger/player.log'
+# Mpg123Player::Configuration.log_path = Rails.root.join('log', 'player.log')
 
 # Another log file that traps the $stderr output from the player.  Look here for ALSA errors and so on.
 #
-# Mpg123Player::Configuration.error_log_path = '/var/websinger/errors.log'
+# Mpg123Player::Configuration.error_log_path = Rails.root.join('log', 'player.err.log')

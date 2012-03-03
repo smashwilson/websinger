@@ -1,3 +1,5 @@
+require 'mpg123player/common'
+
 Websinger::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -27,4 +29,7 @@ Websinger::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Use the development client (which plays no actual sound).
+  Mpg123Player::Configuration.client_class = DevelopmentClient
 end
