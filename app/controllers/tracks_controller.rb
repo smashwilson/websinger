@@ -33,12 +33,10 @@ class TracksController < ApplicationController
   end
 
   def album_art
-    if params[:id] == 'placeholder'
-      art = AlbumArt.default
-    else
-      @track = Track.find(params[:id])
-      art = @track.album_art
-    end
+    redirect_to view_context.image_path('empty-album.png') and return if params[:id] == 'empty'
+    redirect_to view_context.image_path('missing-album.png') and return if params[:id] == 'placeholder'
+
+    art = Track.find(params[:id]).album_art
 
     response.headers['x-placeholder-art'] = 'true' if art.default?
     if art && art.ok?

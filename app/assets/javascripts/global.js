@@ -51,7 +51,7 @@ $(function() {
 
       // Update track data.
       if (lastStatus == null || status.track_id != lastStatus.track_id) {
-        var albumArtId = status.track_id || 'placeholder';
+        var albumArtId = status.track_id || 'empty';
         $('.player .album-art').attr('src', '/tracks/' + albumArtId + '/album-art');
         $('.player .track .title').html(status.title || ' ');
         $('.player .track .artist').html(status.artist || ' ');

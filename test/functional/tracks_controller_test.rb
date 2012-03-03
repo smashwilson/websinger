@@ -25,9 +25,16 @@ class TracksControllerTest < ActionController::TestCase
 
   test "explicit request for placeholder album art" do
     get :album_art, { :id => 'placeholder' }
-    assert_response :success
-    assert_equal 'image/png', @response.header['Content-Type']
-    assert_equal 'true', @response.header['x-placeholder-art']
+
+    assert_response :redirect
+    assert @response.header['Location'].ends_with?('missing-album.png')
+  end
+
+  test "request for empty album art" do
+    get :album_art, { :id => 'empty' }
+
+    assert_response :redirect
+    assert @response.header['Location'].ends_with?('empty-album.png')
   end
 
 end
