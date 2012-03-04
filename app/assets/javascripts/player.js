@@ -81,55 +81,74 @@ $(function () {
   // Clicking the mouse on the progress bar executes a jump action with the percentage of the X coordinate as a
   // command parameter.
   function jumpTracker(event) {
-    var pixels = event.pageX - $(this).offset().left;
+    var pixels = event.pageX - $('.progress').offset().left;
     $('.player .progress .bar').css('width', pixels + 'px');
   }
 
-  $('.progress').mouseenter(function () {
-    updateProgress = false;
-    $(this).mousemove(jumpTracker);
-  });
-  $('.progress').mouseleave(function () {
-    $(this).unbind('mousemove', jumpTracker);
+  function jumpSeconds(event) {
+    var jumpBar = $('.progress');
+    var percent = (event.pageX - jumpBar.offset().left) / jumpBar.width();
     if (lastStatus != null) {
-      $('.player .progress .bar').css('width', lastStatus.percent_complete + '%')
+      return Math.floor(lastStatus.length * percent);
+    } else {
+      return 0;
     }
-    updateProgress = true;
-  });
-  $('.progress').click(function (event) {
-    var percent = Math.floor((event.pageX - $(this).offset().left) * 100 / $(this).width());
-    $.ajax({
-      url: '/player',
-      type: 'PUT',
-      data: { 'command': 'jump', 'parameter': percent }
-    });
+  }
+
+  $('.progress').hoverIntent({
+    'over': function (event) {
+      updateProgress = false;
+      jumpTracker(event);
+      $(this).mousemove(jumpTracker);
+    },
+    'out': function () {
+      $(this).unbind('mousemove', jumpTracker);
+      if (lastStatus != null) {
+        $('.player .progress .bar').css('width', (lastStatus.seconds * 100 / lastStatus.length) + '%');
+      }
+      updateProgress = true;
+    }
+  }).click(function (event) {
+    if (lastStatus != null) {
+      $.ajax({
+        url: '/player',
+        type: 'PUT',
+        data: { 'command': 'jump', 'parameter': jumpSeconds(event) }
+      });
+    };
   });
 
   // Moving the mouse over the volume control causes the volume mask to track the Y coordinate of the mouse pointer.
   // Clicking the mouse on the volume control sends a volume action with the percentage of the Y coordinate as a
   // command parameter.
   function volumeTracker(event) {
-    var pixels = event.pageY - $(this).offset().top;
+    var pixels = event.pageY - $('.volume').offset().top;
     $('.player .volume .mask').css('height', pixels + 'px');
   }
 
-  $('.volume').mouseenter(function () {
-    updateVolume = false;
-    $(this).mousemove(volumeTracker);
-  })
-  $('.volume').mouseleave(function () {
-    $(this).unbind('mousemove', volumeTracker);
-    if (lastStatus != null) {
-      $('.player .volume .mask').css('height', (100 - lastStatus.volume) + '%');
+  function volumePercent(event) {
+    var volumeBar = $('.volume');
+    return 100 - Math.floor((event.pageY - volumeBar.offset().top) * 100 / volumeBar.height());
+  }
+
+  $('.volume').hoverIntent({
+    'over': function (event) {
+      updateVolume = false;
+      volumeTracker(event);
+      $(this).mousemove(volumeTracker);
+    },
+    'out': function () {
+      $(this).unbind('mousemove', volumeTracker);
+      if (lastStatus != null) {
+        $('.player .volume .mask').css('height', (100 - lastStatus.volume) + '%');
+      }
+      updateVolume = true;
     }
-    updateVolume = true;
-  })
-  $('.volume').click(function (event) {
-    var percent = 100 - Math.floor((event.pageY - $(this).offset().top) * 100 / $(this).height());
+  }).click(function (event) {
     $.ajax({
       url: '/player',
       type: 'PUT',
-      data: { 'command': 'volume', 'parameter': percent }
+      data: { 'command': 'volume', 'parameter': volumePercent(event) }
     });
   })
 });

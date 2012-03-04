@@ -8,5 +8,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require autocomplete-rails
+//= require jquery.hoverIntent
 //= require global
 //= require player
