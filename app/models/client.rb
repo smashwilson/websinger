@@ -5,28 +5,32 @@ require 'active_support/json'
 class Client
   include Mpg123Player
   include Configurable
+  include ActiveSupport::BufferedLogger::Severity
 
+  attr_accessor :asynchronous
   attr_reader :error
 
   def initialize
     configure
+    @asynchronous = false
   end
 
   # Issue a command to the server and wait for the remote process to handle it, within the currently configured
   # +command_timeout+.
   def command string, parameter = nil
     cmd = PlayerCommand.create!(:action => string, :parameter => parameter)
+    return if @asynchronous
 
     Rails.logger.silence(WARN) do
       wait_time = 0
       until wait_time >= @command_timeout
         wait_time += sleep(@command_poll)
-        return true unless PlayerCommand.exist?(cmd.id)
+        return unless PlayerCommand.exists?(cmd.id)
       end
     end
 
     # Timed out waiting for command acceptance
-    false
+    @error = "Timed out submitting command #{string}."
   end
 
   # Status

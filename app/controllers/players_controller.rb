@@ -2,6 +2,7 @@ require 'mpg123player/common'
 
 class PlayersController < ApplicationController
   before_filter :create_player_client
+  attr_accessor :client
 
   def show
     render :json => @status
@@ -19,7 +20,7 @@ class PlayersController < ApplicationController
   private
 
   def create_player_client
-    @player = Client.new
+    @player = @client || Client.new
     @player.ok?
 
     @status = @player.status
