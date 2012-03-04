@@ -12,7 +12,7 @@ module Mpg123Player
 # Server process that plays enqueued tracks by sending commands through a pipe to an mpg123 child process.
 class ProductionServer < Server
 
-  def create_logger log_level
+  def create_logger
     Logger.new(@log_path, 1, 1024 * 1024)
   end
 
