@@ -19,7 +19,7 @@ class PlayersController < ApplicationController
   private
 
   def create_player_client
-    @player = Mpg123Player::Configuration.client_class.new
+    @player = Client.new
     @player.ok?
 
     @status = @player.status
