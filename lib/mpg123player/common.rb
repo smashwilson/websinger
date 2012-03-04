@@ -60,6 +60,7 @@ class Status
 
   # Determine whether or not this Status has changed sufficiently from +other+ to justify rewriting it to disk.
   def is_close_to? other
+    return false if other.nil?
     return false unless @playback_state == other.playback_state
     return false unless @artist == other.artist
     return false unless @album == other.album

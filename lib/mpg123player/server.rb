@@ -8,6 +8,7 @@ require 'active_support/json'
 
 module Mpg123Player
 
+# Superclass of daemon processes that consume tracks from EnqueuedTracks and commands from PlayerCommands.
 class Server
   include Configurable
   include ActiveSupport::BufferedLogger::Severity
@@ -20,49 +21,40 @@ class Server
     configure
 
     # Initialize the logger.
-    @logger = Logger.new(@log_path, 1, 1024 * 1024)
+    @logger = create_logger
     @logger.level = log_level
+    @logger.formatter = proc do |severity, datetime, progname, msg|
+      "#{datetime.strftime('%d %b %Y %I:%M:%S %p')} #{severity.rjust 5} | #{msg.to_s}\n"
+    end
 
     check_paths
 
     @poll_time = 1 # Seconds, may be fractional
     @status = Status.stopped
-    @last_status = @status.dup
     @shutting_down = false
+
+    update_status
+  end
+
+  def create_logger
+    raise '#create_logger not implemented'
   end
 
   # Lifecycle events.
 
-  # Open a pipe to the player executable and start the parsing loop. Only return once a shutdown command is processed.
+  # The main process loop. Only return after a shutdown command is received.
   def main_loop
-    @logger.info 'Starting player.'
-    @pipe = IO.popen("#{@player_path} -R -", 'w+')
-
-    # Record the player pid. Also, be sure that the player will be SIGTERM'd if we are.
-    File.open(@pid_path, 'w') { |f| f.puts @pipe.pid }
-    Signal.trap('TERM') { Process.kill 'TERM', @pipe.pid }
-
-    # Load the first track, or wait for the first track to be enqueued.
-    advance
-
-    # Cycle until a shutdown command is received.
-    until @shutting_down
-      process_line(@pipe.gets) if @pipe.ready?
-      process_command_queue
-    end
-
-    # Kill the mpg123 process.
-    Process.kill 'TERM', @pipe.pid
-
-    @logger.info 'Stopping player.'
-    @logger.close
+    raise '#main_loop not implemented'
   end
 
   # A track finished. Load the next enqueued track, waiting for one to be enqueued if the queue is empty.
   def advance
     e = EnqueuedTrack.top
     while e.nil? && !@shutting_down
-      @logger.debug 'Waiting for track'
+      @status.clear
+      update_status
+
+      @logger.debug 'Waiting for track.'
       sleep @poll_time
       e = EnqueuedTrack.top
       process_command_queue
@@ -72,65 +64,40 @@ class Server
 
   # Player process controls.
 
+  # Override to perform actual track loading, then call super.
   def load_track t, state = :playing
+    @logger.info "Loading track #{t.to_s} in state #{state}."
+
     @status.on_track t
     @status.playback_state = state
-
-    command = state == :playing ? 'L' : 'LP'
-    execute "#{command} #{t.path}"
-
     update_status
   end
 
   def play_action
-    execute 'P' if @status.playback_state != :playing
+    # Override to handle play action.
   end
 
   def pause_action
-    execute 'P' if @status.playback_state != :paused
+    # Override to handle pause action.
   end
 
-  # Jump to an absolute track position, specified in seconds.
   def jump_action seconds
-    unless seconds =~ /[0-9]+/
-      @logger.error "Invalid jump offset: #{seconds}"
-      return
-    end
-    if [:playing, :paused].include?(@status.playback_state)
-      execute "J #{seconds}s"
-      @status.seconds = seconds.to_f
-      update_status
-    end
+    # Override to handle jump action.
   end
 
-  # Set player volume as a percent, 0 to 100.
   def volume_action percent
-    unless percent =~ /100|[0-9]?[0-9]/
-      @logger.error "E Invalid volume: #{percent}"
-      return
-    end
-    execute "V #{percent}"
+    # Override to handle volume action.
   end
 
-  # Restart the current track.
   def restart_action
-    execute "J 0"
-    update_status
+    # Override to handle restart action.
   end
 
-  # Skip to the next enqueued track, if one is present. Stop playback if the queue is empty.
   def skip_action
-    e = EnqueuedTrack.top
-    if e.nil?
-      execute 'S'
-    else
-      load_track(e.track, @status.playback_state)
-    end
+    # Override to handle skip action.
   end
 
-  # Unload the track and stop the current player.
   def shutdown_action
-    execute 'Q'
     @shutting_down = true
   end
 
@@ -149,56 +116,6 @@ MSG
         raise
       end
     end
-  end
-
-  # Parse MPG123 remote interface output.
-  # For documentation, see http://mpg123.org/cgi-bin/viewvc.cgi/tags/1.2.1/doc/README.remote
-  def process_line line
-    @logger.debug line
-
-    # EOF from pipe.
-    return if line.nil?
-
-    # Startup version message.
-    return if line =~ /^@R MPG123/
-
-    # Stream information that we don't care about.
-    return if line =~ /^@S /
-
-    # Jump feedback.
-    return if line =~ /^@J/
-
-    # ID3v2 metadata tags. We pull track data from ActiveRecord instead.
-    return if line =~ /^@I/
-
-    # Frame info (during playback).
-    if md = /^@F [0-9-]+ [0-9-]+ ([0-9.-]+) ([0-9.-]+)/.match(line)
-      @status.seconds = md[1].to_f
-      update_status
-      return
-    end
-
-    # Playing status changed.
-    if md = /^@P (\d+)/.match(line)
-      transition_to_state([:stopped, :paused, :playing][md[1].to_i])
-      return
-    end
-
-    # Error.
-    if md = /^@E (.+)/.match(line)
-      @logger.error md[1]
-      return
-    end
-
-    # Volume change.
-    if md = /^@V (\d+)/.match(line)
-      @status.volume = md[1].to_i
-      update_status
-      return
-    end
-
-    # Unparsed!
-    @logger.warn "UNPARSED #{line}"
   end
 
   # Handle all enqueued PlayerCommands.
@@ -222,7 +139,7 @@ MSG
   # Invoke the appropriate callbacks depending on the current and previous player states.
   def transition_to_state playback_state
     former = @status.playback_state
-    @logger.info "Transitioning from state #{former} to #{playback_state}"
+    @logger.info "Transitioning from state #{former} to #{playback_state}."
     if former != playback_state
       @status.playback_state = playback_state
       @status.clear if playback_state == :stopped
@@ -237,12 +154,6 @@ MSG
       File.open(@status_path, 'w') { |f| f.puts @status.to_json }
       @last_status = @status.dup
     end
-  end
-
-  # Send a command to the mpg123 pipe.
-  def execute string
-    @logger.debug "> #{string}"
-    @pipe.print "#{string}\n"
   end
 
 end

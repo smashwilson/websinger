@@ -3,12 +3,26 @@
 
 namespace :websinger do
 
-  desc 'The MP3 player daemon.  Should be managed by init.'
-  task :player => :environment do
-    require 'mpg123player/server'
+  def start_server server_class, log_level_name
+    require 'logger'
 
-    server = Mpg123Player::Server.new
+    log_level = Logger.const_get(log_level_name || :INFO)
+    server = server_class.new(1, log_level)
     server.main_loop
+  end
+
+  desc 'The MP3 player daemon.  Should be managed by init.'
+  task :player, [:log_level] => :environment do |t, args|
+    require 'mpg123player/production_server'
+
+    start_server Mpg123Player::ProductionServer, args.log_level
+  end
+
+  desc 'Fake MP3 player daemon that advances through tracks, but plays no audio.'
+  task :devplayer, [:log_level] => [:environment] do |t, args|
+    require 'mpg123player/development_server'
+
+    start_server Mpg123Player::DevelopmentServer, args.log_level
   end
 
 end
