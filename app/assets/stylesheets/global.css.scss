@@ -3,14 +3,7 @@ $heading: 120px;
 $headingpad: 20px;
 $headingheight: $heading - (2 * $headingpad);
 
-@mixin replace-image($url, $width, $height) {
-  display: inline-block ;
-  background: $url no-repeat ;
-  text-indent: -9999px ;
-  overflow: hidden ;
-  height: $height ;
-  width: $width ;
-}
+@import 'utilities' ;
 
 /* Globally applicable styles */
 

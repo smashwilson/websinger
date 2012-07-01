@@ -1,0 +1,10 @@
+/* Mixins and variables that should be available to all stylesheets. */
+
+@mixin replace-image($url, $width, $height) {
+  display: inline-block ;
+  background: $url no-repeat ;
+  text-indent: -9999px ;
+  overflow: hidden ;
+  height: $height ;
+  width: $width ;
+}
