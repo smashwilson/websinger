@@ -55,7 +55,7 @@ $headingheight: $heading - (2 * $headingpad);
 /* AJAX status */
 
 .status {
-  position: absolute ;
+  position: fixed ;
   left: 5% ;
   right: 5% ;
   bottom: 5% ;
