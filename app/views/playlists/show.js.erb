@@ -12,7 +12,7 @@ $(function () {
     start: startDrag,
     update: finishDrag
   })
-  
+
   // Executed when a drag operation starts.
   function startDrag(event, ui) {
     suppressUpdate = true
@@ -27,12 +27,12 @@ $(function () {
       complete: function() { suppressUpdate = false }
     })
   }
-  
+
   // Enable the Add button when a track is chosen from the autocomplete box.
   $('#track-name').bind( 'autocompleteselect', function() {
     $('#add-button').attr('disabled', false)
   })
-  
+
   // When the Add button is clicked, submit an enqueue request with the id of the selected track.
   $('#add-button').click(function () {
     $.ajax({
@@ -46,10 +46,10 @@ $(function () {
         reloadPlaylist()
       }
     })
-    
+
     return false
   })
-  
+
   // Bind "remove" link events on the list parent to avoid re-attaching event handlers every time the playlist is
   // refreshed.  Update the playlist after a delete operation completes (successfully or otherwise).
   $('.playlist').bind('ajax:beforeSend', function(event, xhr) {
@@ -65,7 +65,7 @@ $(function () {
     reloadPlaylist()
     suppressUpdate = false
   })
-  
+
   // Asynchronously refresh the playlist, disabling drag-and-drop while doing so.
   function reloadPlaylist() {
     $('.playlist').addClass('dragging-disabled').sortable('disable')

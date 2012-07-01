@@ -23,13 +23,13 @@ ul.ui-autocomplete {
   border: solid 1px blue ;
   background: white ;
   list-style: none ;
-  
+
   li.ui-menu-item a {
     display: block ;
     width: 394px ;
     padding: 2px 3px ;
   }
-  
+
   li.ui-menu-item a.ui-state-hover {
     background: #ddf ;
   }
@@ -44,9 +44,16 @@ ul.ui-autocomplete {
 ol.playlist {
   margin: 10px 0 ;
 
+  li {
+    padding-left: 4px ;
+  }
+
   .handle {
+    @include replace-image(image-url('handle.gif'), 16, 10);
     cursor: n-resize ;
     margin: 0 4px ;
+    width: 16px ;
+    height: 10px ;
   }
 }
 
