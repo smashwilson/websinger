@@ -5,6 +5,19 @@ $headingheight: $heading - (2 * $headingpad);
 
 @import 'utilities' ;
 
+/* Provide default, hover, and submitted states for each command button. */
+@mixin command($name, $horiz-dim) {
+  #command_#{$name}:link {
+    @include replace-image(image-url('button-#{$name}.png'), $horiz-dim, 32px);
+  }
+  #command_#{$name}:hover {
+    @include replace-image(image-url('button-#{$name}-hover.png'), $horiz-dim, 32px);
+  }
+  .submitted#command_#{$name}, .submitted#command_#{$name}:hover {
+    @include replace-image(image-url('button-#{$name}-submitted.png'), $horiz-dim, 32px);
+  }
+}
+
 /* Globally applicable styles */
 
 * {
@@ -118,33 +131,10 @@ $headingheight: $heading - (2 * $headingpad);
         $small-dim: 32px;
         $large-dim: 48px;
 
-        #command_restart {
-          @include replace-image(image-url('button-restart.png'), $small-dim, $small-dim);
-        }
-        // .submitted#command_restart {
-        //   @include replace-image(image-url('button-restart-submitted.png'), $small-dim, $small-dim);
-        // }
-
-        #command_play {
-          @include replace-image(image-url('button-play.png'), $large-dim, $small-dim);
-        }
-        // .submitted#command_play {
-        //  @include replace-image(image-url('button-play-submitted.png'), $large-dim, $large-dim);
-        // }
-
-        #command_pause {
-          @include replace-image(image-url('button-pause.png'), $large-dim, $small-dim);
-        }
-        // .submitted#command_pause {
-        //  @include replace-image(image-url('button-pause-submitted.png'), $large-dim, $large-dim);
-        // }
-
-        #command_skip {
-          @include replace-image(image-url('button-skip.png'), $small-dim, $small-dim);
-        }
-        // .submitted#command_restart {
-        //  @include replace-image(image-url('button-skip-submitted.png'), $small-dim, $small-dim);
-        // }
+        @include command(restart, 32px);
+        @include command(play, 48px);
+        @include command(pause, 48px);
+        @include command(skip, 32px);
       }
 
       .progress-text {
