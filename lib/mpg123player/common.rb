@@ -50,8 +50,9 @@ class Status
   end
 
   def clear
-    @artist = @album = @title = @length = @track_id = @track = nil
+    @artist = @album = @title = @track_id = @track = nil
     @seconds = 0
+    @length = 1
     @volume = 100
     @error = nil
   end
@@ -73,6 +74,12 @@ class Status
     true
   end
 
+  # Generate a consistent textual description of progress within the track, formatted as "MM:SS / MM:SS".
+  def progress_text
+    return "" unless @track_id
+    "#{format_seconds(@seconds)} / #{format_seconds(@length)}"
+  end
+
   # Convert this Status object to a Hash for conversion to JSON.
   def to_hash
     { :playback_state => @playback_state,
@@ -80,9 +87,10 @@ class Status
       :artist => @artist,
       :album => @album,
       :title => @title,
-      :length => @length,
       :track_id => @track_id,
       :seconds => @seconds,
+      :length => @length,
+      :progress_text => progress_text,
       :volume => @volume }
   end
 
@@ -100,6 +108,16 @@ class Status
     end
     inst
   end
+
+  protected
+
+  def format_seconds seconds
+    minutes = (seconds / 60.0).floor
+    remaining = (seconds - (minutes * 60)).floor
+    trailing = if remaining < 10 then '0' else '' end
+    "#{minutes}:#{trailing}#{remaining}"
+  end
+
 end
 
 end

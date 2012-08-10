@@ -56,11 +56,7 @@ $(function () {
       }
 
       // Update the progress text.
-      var progressText = '';
-      if (status.playback_state != 'stopped') {
-        progressText = formatSeconds(status.seconds) + ' / ' + formatSeconds(status.length);
-      }
-      $('.player .control-cluster .progress-text').html(progressText);
+      $('.player .control-cluster .progress-text').html(status.progress_text);
 
       // Update the volume control.
       if (updateVolume) {
