@@ -6,6 +6,7 @@ tmp/
 
 .esd_auth
 .pulse-cookie
+.pulse
 
 # Asset pipeline
 .sass-cache/
