@@ -12,3 +12,4 @@ public/stylesheets/
 # Eclipse metadata
 .project
 .buildpath
+.settings/
