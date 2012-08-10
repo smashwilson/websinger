@@ -1,19 +1,19 @@
 .player
-  = image_tag image_path('empty-album.png'), :class => 'album-art', :alt => 'Album art', :size => '90x90'
+  = image_tag album_art_track_path(@track.album_art_id), :class => 'album-art', :alt => 'Album art', :size => '90x90'
   .volume
-    .mask{ :style => "height: 0%" }
+    .mask{ :style => "height: #{100 - @status.volume}%" }
   %p.error
   .central
     .control-cluster
       %p.controls
         = command_link 'restart'
-        = command_link 'pause', false
-        = command_link 'play'
+        = command_link 'pause', @status.playback_state == :playing
+        = command_link 'play', @status.playback_state != :playing
         = command_link 'skip'
-      %p.progress-text
+      %p.progress-text= @status.progress_text
     .track
-      %p.title
-      %p.artist
-      %p.album
+      %p.title= @track.title
+      %p.artist= @track.artist
+      %p.album= @track.album
     .progress
-      .bar{ :style => "width: 0%" }
+      .bar{ :style => "width: #{@status.seconds * 100.0 / @status.length}%" }

@@ -25,6 +25,10 @@ class Track < ActiveRecord::Base
     art
   end
 
+  def album_art_id
+    id
+  end
+
   # Regenerate the artist and album slugs.
   def reslug
     self.artist_slug = self.artist ? self.artist.to_url : nil

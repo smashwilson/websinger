@@ -1,21 +1,7 @@
 require 'test_helper'
 require 'active_support/json'
 
-require 'mpg123player/common'
-
 class PlayersControllerTest < ActionController::TestCase
-
-  class TestClient < Client
-    def initialize
-      super
-      @status = Mpg123Player::Status.stopped
-      @asynchronous = true
-    end
-
-    def ok?
-      true
-    end
-  end
 
   test "issue commands through the client" do
     @controller.client = TestClient.new
