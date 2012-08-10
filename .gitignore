@@ -4,6 +4,9 @@ log/*.log
 tmp/
 *~
 
+.esd_auth
+.pulse-cookie
+
 # Asset pipeline
 .sass-cache/
 public/assets/
