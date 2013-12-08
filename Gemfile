@@ -6,8 +6,9 @@ gem 'rails', '4.0.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
-# Use SCSS for stylesheets
+# Use SCSS for stylesheets and Haml for views.
 gem 'sass-rails', '~> 4.0.0'
+gem 'haml'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -27,19 +28,21 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'stringex'
+gem 'randumb'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn'
 
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
+group :test, :development do
+  # Use RSpec instead of Test::Unit.
+  gem 'rspec-rails'
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+  # View specs
+  gem 'webrat'
+end
