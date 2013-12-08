@@ -1,9 +1,0 @@
-%h2 browse
-= form_tag(tracks_path, :method => 'get') do
-  = text_field_tag :query, params[:query]
-  = submit_tag 'search'
-#tracklist
-  %p#loading loading results...
-- content_for :head do
-  = stylesheet_link_tag 'browse'
-  = javascript_include_tag tracks_path
