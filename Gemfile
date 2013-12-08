@@ -30,6 +30,7 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'stringex'
 gem 'randumb'
+gem 'mp3info'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
