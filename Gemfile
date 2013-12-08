@@ -42,6 +42,7 @@ gem 'unicorn'
 group :test, :development do
   # Use RSpec instead of Test::Unit.
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
 
   # View specs
   gem 'webrat'
