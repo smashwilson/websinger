@@ -33,7 +33,7 @@ describe Track do
     yes << create(:track, album: 'Rise of the Yes')
     yes << create(:track, title: 'A Track Yes Title')
 
-    Track.matching('Yes').should =~ yes
+    Track.matching('yes').should =~ yes
   end
 
   it "shows all tracks within an album" do
