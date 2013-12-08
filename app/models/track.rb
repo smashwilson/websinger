@@ -5,6 +5,8 @@ class Track < ActiveRecord::Base
 
   has_many :enqueued_tracks
 
+  before_save :reslug
+
   def to_s
     "#{artist} - #{title}"
   end
