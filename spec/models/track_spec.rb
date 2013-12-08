@@ -44,6 +44,4 @@ describe Track do
 
     Track.in_album('an-artist', 'an-album').should =~ yes
   end
-
-  it "performs a random sampling"
 end
