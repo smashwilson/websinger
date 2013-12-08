@@ -23,7 +23,18 @@ describe Track do
     t.album_slug.should == 'special-plus-characters'
   end
 
-  it "reads metadata from an actual mp3 file"
+  it "reads metadata from an actual mp3 file" do
+    t = create :track, path: Rails.root.join('spec', 'fixtures', 'music',
+      'full-tags.mp3').to_s
+    t.update_from_path t.path
+    t.title.should == 'track title'
+    t.artist.should == 'artist'
+    t.album.should == 'album'
+    t.length.should == 29
+    t.track_number.should == 4
+    t.disc_number.should == 16
+  end
+
   it "ignores invalid UTF-8 characters in various fields"
 
   it "does a substring search on artist, album and title" do
