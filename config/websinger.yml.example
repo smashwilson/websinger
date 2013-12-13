@@ -1,0 +1,15 @@
+---
+development: &base
+  player_path: /usr/bin/mpg123
+  status_path: tmp/status.yml
+  pid_path: tmp/player.pid
+  log_out_path: log/player.out.log
+  log_err_path: log/player.err.log
+  command_poll: 0.1
+  command_timeout: 5
+
+production:
+  *base
+
+test:
+  *base
