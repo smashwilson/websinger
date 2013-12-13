@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/smashwilson/websinger.png?branch=master)](https://travis-ci.org/smashwilson/websinger)
+
 # Websinger
 
 This is a weekend project of mine from a while ago. As such, the code quality
