@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Player::Status do
+describe Status do
   let(:track_data) do
     [:artist, :album, :title, :length]
   end
   let(:track) { create :track }
 
   context "initial state" do
-    let(:status) { Player::Status.new }
+    let(:status) { Status.new }
 
     it "should be ready to play" do
       status.playback_state.should == :playing

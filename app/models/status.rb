@@ -1,5 +1,3 @@
-module Player
-
 Commands = %q{play pause jump volume restart skip stop shutdown}
 
 class Status
@@ -94,7 +92,5 @@ class Status
     trailing = if remaining < 10 then '0' else '' end
     "#{minutes}:#{trailing}#{remaining}"
   end
-
-end
 
 end
