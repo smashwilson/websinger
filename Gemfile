@@ -30,7 +30,7 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'stringex'
 gem 'randumb'
-gem 'ruby-mp3info', require: 'mp3info'
+gem 'ruby-mp3info', require: 'mp3info', github: 'smashwilson/ruby-mp3info'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
