@@ -40,6 +40,9 @@ end
 # Use unicorn as the app server
 gem 'unicorn'
 
+# Use pry as a console.
+gem 'pry-rails'
+
 group :test, :development do
   # Use RSpec instead of Test::Unit.
   gem 'rspec-rails'
