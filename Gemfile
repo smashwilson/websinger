@@ -1,48 +1,53 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.0.2'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+# Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
-  gem 'uglifier', '>= 1.0.3'
-end
+# Use SCSS for stylesheets and Haml for views.
+gem 'sass-rails', '~> 4.0.0'
+gem 'haml'
 
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
+
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
+
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# gem 'therubyracer', platforms: :ruby
+
+# Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# Use unicorn as the web server
-# gem 'unicorn'
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
 
-# Deploy with Capistrano
-# gem 'capistrano'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 1.2'
 
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
-
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
-
-gem 'haml'
-gem 'sass'
-gem 'ruby-mp3info'
-gem 'rails3-jquery-autocomplete'
 gem 'stringex'
 gem 'randumb'
+gem 'ruby-mp3info', require: 'mp3info', github: 'smashwilson/ruby-mp3info'
+
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', require: false
+end
+
+# Use unicorn as the app server
+gem 'unicorn'
+
+# Use pry as a console.
+gem 'pry-rails'
+
+group :test, :development do
+  # Use RSpec instead of Test::Unit.
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+
+  # View specs
+  gem 'webrat'
+end

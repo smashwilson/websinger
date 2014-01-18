@@ -1,12 +1,11 @@
-require 'mp3info'
-require 'randumb'
-
 class Track < ActiveRecord::Base
   validates_uniqueness_of :path
   validates_uniqueness_of :title, :scope => [:artist, :album]
   validates_presence_of :title
 
   has_many :enqueued_tracks
+
+  before_save :reslug
 
   def to_s
     "#{artist} - #{title}"
@@ -39,7 +38,7 @@ class Track < ActiveRecord::Base
     self.path = p
     rencode = lambda do |original|
       next nil if original.nil?
-      str = original.encode('utf-8', :invalid => :replace, :undef => :replace)
+      str = original.encode('utf-8', invalid: :replace, undef: :replace)
       str.gsub!("\x00", "")
       next nil if str.empty?
       str
@@ -63,7 +62,8 @@ class Track < ActiveRecord::Base
 
   # Return all tracks with a title, album, or artist name matching a query term.
   def self.matching term
-    where('title like :term or album like :term or artist like :term', { :term => "%#{term}%" }).order(:artist, :album, :track_number)
+    where('title like :term or album like :term or artist like :term',
+      { :term => "%#{term}%" }).order(:artist, :album, :track_number)
   end
 
   # Choose a ramdom selection of #per_page sample tracks.
@@ -73,7 +73,8 @@ class Track < ActiveRecord::Base
 
   # Return all tracks in the specified album, ordered by track number.
   def self.in_album artist_slug, album_slug
-    where(:artist_slug => artist_slug, :album_slug => album_slug).order(:disc_number, :track_number)
+    where(:artist_slug => artist_slug, :album_slug => album_slug).
+      order(:disc_number, :track_number)
   end
 
   # The number of results to display at once.

@@ -1,6 +1,0 @@
-%ul.tracks
-  - tracklist.each do |track|
-    %li
-      = render :partial => 'track', :object => track
-      = link_to 'enqueue', enqueue_playlist_path(:id => track.id), :class => 'enqueue',
-          :id => track.id, :method => 'POST', :remote => true
