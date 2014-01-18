@@ -38,7 +38,7 @@ class Track < ActiveRecord::Base
     self.path = p
     rencode = lambda do |original|
       next nil if original.nil?
-      str = original.encode('utf-8', :invalid => :replace, :undef => :replace)
+      str = original.encode('utf-8', invalid: :replace, undef: :replace)
       str.gsub!("\x00", "")
       next nil if str.empty?
       str
