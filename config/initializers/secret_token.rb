@@ -9,4 +9,15 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Websinger::Application.config.secret_key_base = 'dcd7d62688ebe041a55af521478ac02b86c22898a42ad7ca73300c5b33c16992d0ed3c67dbacf9fc49b689ebf60043577f78ecfd7a5951f37e9c20c8ee7869a9'
+
+require 'securerandom'
+
+Websinger::Application.config.secret_key_base = begin
+  if File.exist? '.secret'
+    File.read '.secret'
+  else
+    token = SecureRandom.hex(128)
+    File.write '.secret', token
+    token
+  end
+end
