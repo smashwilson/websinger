@@ -4,4 +4,17 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
+
+require 'securerandom'
+
+Websinger::Application.config.secret_token = begin
+  if File.exist? '.secret'
+    File.read '.secret'
+  else
+    token = SecureRandom.hex(128)
+    File.write '.secret', token
+    token
+  end
+end
+
 Websinger::Application.config.secret_token = '3246232a570216c142f10a5610ff598097c45c45b845400e3b41bd51178a8b31d2717e0f21b6b1d280b258d1d305b65baa6a72c3f41ebdab6980606f5d33714b'
